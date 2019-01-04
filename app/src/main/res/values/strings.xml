@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">bKash</string>
+
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="send_to_news">Share this...</string>
+    <string name="sent_from">Sent from bKash</string>
+    <string name="no_connection_title">No Internet!!</string>
+    <string name="no_connection_msg">Please connect with internet.</string>
+    <string name="dialog_ok">Ok</string>
+    <string name="invitation_deep_link">https://pcv59.app.goo.gl/vQaV</string>
+
+    <string name="runtime_permissions_txt">Please enable ALL permissions from app settings</string>
+</resources>

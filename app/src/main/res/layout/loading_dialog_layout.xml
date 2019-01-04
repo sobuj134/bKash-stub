@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center">
+
+    <RelativeLayout
+        android:id="@+id/layoutLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center_vertical|center"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/layoutIconConatiner"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <com.wang.avi.AVLoadingIndicatorView
+                android:id="@+id/avi"
+                style="@style/AVLoadingIndicatorView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:indicatorColor="@color/black_overlay"
+                app:indicatorName="BallClipRotatePulseIndicator"/>
+
+            <ImageView
+                android:id="@+id/ivTick"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:visibility="gone"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_mini_ok"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/message"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textColor="@color/black_overlay"
+            android:layout_toRightOf="@+id/layoutIconConatiner"
+            android:gravity="center_vertical"
+            android:paddingRight="10dp"
+            android:text="Please wait" />
+    </RelativeLayout>
+</RelativeLayout>

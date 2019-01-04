@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="aboutdevice.com.munir.symphony.mysymphony.MainActivity">
+
+
+    <item
+        android:id="@+id/action_share_new_web"
+        android:orderInCategory="100"
+        android:title="SHARE"
+        app:showAsAction="always" />
+
+
+
+</menu>

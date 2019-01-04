@@ -1,0 +1,86 @@
+{
+  "project_info": {
+    "project_number": "882348019046",
+    "firebase_url": "https://balchal-6f7f3.firebaseio.com",
+    "project_id": "balchal-6f7f3",
+    "storage_bucket": "balchal-6f7f3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:882348019046:android:73ad565b62e7c11b",
+        "android_client_info": {
+          "package_name": "com.ess.munirulhoque.ess_new"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "882348019046-2n8b670cat88gvcgqcmsmns5qt168oh9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGQYn9tUhJLODS5OfurD0G3VAKQy1mmeA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:882348019046:android:7dc1241265dbc290",
+        "android_client_info": {
+          "package_name": "com.symphony.bkash"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "882348019046-ulqluqpelr2c86ve29ov4g0k60pb6n90.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.symphony.bkash",
+            "certificate_hash": "aba50268d13c347d4ce56992a1fb2dbc386a63e4"
+          }
+        },
+        {
+          "client_id": "882348019046-2n8b670cat88gvcgqcmsmns5qt168oh9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGQYn9tUhJLODS5OfurD0G3VAKQy1mmeA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "882348019046-2n8b670cat88gvcgqcmsmns5qt168oh9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

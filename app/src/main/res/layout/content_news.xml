@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.symphony.bkash.NewsActivity"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    tools:showIn="@layout/activity_news">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="180dp"
+            card_view:cardUseCompatPadding="true"
+            android:layout_marginTop="10dp"
+            app:cardElevation="4dp"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minHeight="180dp"
+                android:background="#EEEEEE">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:text="Feature"
+                        android:textStyle="bold"
+                        android:id="@+id/txttitle"
+                        android:layout_marginLeft="7dp"
+                        android:textColor="#000000"
+                        android:maxLines="3"
+                        android:layout_marginBottom="2dp"
+
+
+                        />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/colorViewLine"
+                        android:layout_margin="1dp"
+                        android:layout_below="@+id/txttitle"
+                        />
+
+                    <TextView
+                        android:text="See all the features "
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="39dp"
+                        android:id="@+id/txtbody"
+                        android:linksClickable="false"
+                        android:autoLink="web"/>
+                <TextView
+                    android:text="Promotion going on... "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="34dp"
+                    android:textColor="#BF360C"
+                    android:id="@+id/txtconfig"
+                    android:layout_below="@+id/txtbody"
+                    android:visibility="gone"/>
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#43A047"
+                android:textColor="#ffffff"
+                android:id="@+id/simpleshare"
+                android:onClick="simpleshare"
+                android:text="Share this !!"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>
