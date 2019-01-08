@@ -39,7 +39,7 @@ public class FirstActivity extends BaseActivity implements AppUpdateListener {
             if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED
                     && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
                 PackageManager pm = getApplicationContext().getPackageManager();
-                if(ConnectionUtils.isPackageInstalled(packagename, pm) == 1){
+                if(ConnectionUtils.isPackageInstalled(packagename, pm)){
                     new VersionChecker(this, packagename, this);
                     Intent i = getPackageManager().getLaunchIntentForPackage(packagename);
                     startActivity(i);

@@ -3,8 +3,13 @@ package com.symphony.bkash.util;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
+import android.support.v4.content.ContextCompat;
+import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
+import android.util.Log;
 
 import java.net.NetworkInterface;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,12 +24,12 @@ public class ConnectionUtils {
         return false;
     }
 
-    public static int isPackageInstalled(String packageName, PackageManager packageManager) {
-        int found = 1;
+    public static boolean isPackageInstalled(String packageName, PackageManager packageManager) {
+        boolean found = true;
         try {
             packageManager.getPackageInfo(packageName, 0);
         } catch (PackageManager.NameNotFoundException e) {
-            found = 0;
+            found = false;
         }
         return found;
     }
@@ -63,5 +68,22 @@ public class ConnectionUtils {
             //handle exception
         }
         return "";
+    }
+
+    public static List<String> getSimNumber(Context context) {
+        if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+            SubscriptionManager mSubscriptionManager = SubscriptionManager.from(context);
+            List<SubscriptionInfo> subscriptions = mSubscriptionManager.getActiveSubscriptionInfoList();
+            List<String> simNumbers = new ArrayList<>();
+
+            if (subscriptions.size() > 0) {
+                for (SubscriptionInfo subscriptionInfo : subscriptions) {
+                    Log.v("SIM", subscriptionInfo.getNumber());
+                    simNumbers.add(subscriptionInfo.getIccId());
+                }
+            }
+            return simNumbers;
+        }
+        return null;
     }
 }

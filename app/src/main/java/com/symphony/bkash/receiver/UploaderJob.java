@@ -18,7 +18,9 @@ import com.symphony.bkash.data.model.PostUserInfo;
 import com.symphony.bkash.data.remote.TokenDataApiService;
 import com.symphony.bkash.data.remote.TokenDataApiUtils;
 import com.symphony.bkash.util.ConnectionUtils;
+import com.symphony.bkash.util.SharedPrefUtils;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
@@ -32,40 +34,92 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class UploaderJob extends Job {
+    public static final String INFO_ID_KEY = "bkash_sym_info_id";
+    public static final String ACTIVATION_KEY = "bkash_sym_active_status";
     static final String TAG = "BKASH_TAG";
     public String packagename = "com.bKash.customerapp";
     public static final String SIM_Number = "23382346";
     private TokenDataApiService tokenDataAPIService = TokenDataApiUtils.getUserDataAPIServices();
-    SharedPreferences.Editor editor;
     @NonNull
     @Override
     protected Result onRunJob(Params params) {
         Context ctx = getContext();
+        //IMEI1, IMEI2, MAC, AndroidID, SIM1, SIM2, Model, Activated
+
+        //Sim number
+        String sim1 = "000000", sim2 = "000000";
+        List<String> simList = ConnectionUtils.getSimNumber(ctx);
+        if(simList != null){
+            if(simList.size() == 1){
+                sim1 = simList.get(0);
+            } else if(simList.size() == 2){
+                sim1 = simList.get(0);
+                sim2 = simList.get(1);
+            }
+        }
+
+        // activation algorithm
+        //0 - Not Acivated
+        //1 - Activated
+        //2 - Independent Install
+        //3 - App Removed
+        boolean isActivated = ConnectionUtils.isPackageInstalled(packagename,ctx.getPackageManager());
+        int prevActivated = SharedPrefUtils.getIntegerPreference(ctx, ACTIVATION_KEY, 0);
+        int activated = 0;
+        if(isActivated){
+            switch (prevActivated){
+                case 0:
+                    activated = 2;
+                    break;
+                case 1:
+                    activated = prevActivated;
+                    break;
+                case 2:
+                    activated = prevActivated;
+                    break;
+                case 3:
+                    activated = 2;
+                    break;
+                    default:
+                        break;
+            }
+        } else{
+            switch (prevActivated){
+                case 0:
+                    activated = prevActivated;
+                    break;
+                case 1:
+                    activated = 3;
+                    break;
+                case 2:
+                    activated = 3;
+                    break;
+                case 3:
+                    activated = prevActivated;
+                    break;
+                default:
+                    break;
+            }
+        }
         String mac = "00:00:00:00:00";
-        String activated = "0";
         String modelPref = "Symphony ", model;
-        PackageManager pm = ctx.getPackageManager();
         model = ConnectionUtils.getSystemProperty("ro.product.device");
         if(model == null || model.isEmpty()){
             model = ConnectionUtils.getSystemProperty("ro.build.product");
         }
-        activated = String.valueOf(ConnectionUtils.isPackageInstalled(packagename,pm));
         TelephonyManager telemamanger = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
         if(ContextCompat.checkSelfPermission(ctx, android.Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
-            String getSimSerialNumber = telemamanger.getSimSerialNumber();
-            //String getSimNumber = telemamanger.getLine1Number();
+
             String imei1 = telemamanger.getImei(0);
             String imei2 = telemamanger.getImei(1);
             mac = ConnectionUtils.getMAC();
             String android_id = Settings.Secure.getString(ctx.getContentResolver(),
                     Settings.Secure.ANDROID_ID);
-            SharedPreferences prefs = ctx.getSharedPreferences("PREF_BKASH_INSTALLER", MODE_PRIVATE);
-            editor = ctx.getSharedPreferences("PREF_BKASH_INSTALLER", MODE_PRIVATE).edit();
-            long info_id = prefs.getLong("info_id", 0);
+            long info_id = SharedPrefUtils.getLongPreference(ctx, INFO_ID_KEY, 0);
             if(info_id == 0) {
-                sendInfo(imei1, imei2, mac, android_id, getSimSerialNumber, activated, modelPref + model);
+                sendInfo(ctx, imei1, imei2, mac, android_id, sim1, sim2, String.valueOf(activated), modelPref + model);
             } else {
-                updateInfo(info_id, imei1, imei2, mac, android_id, getSimSerialNumber, activated, modelPref + model);
+                updateInfo(info_id, imei1, imei2, mac, android_id, sim1, sim2, String.valueOf(activated), modelPref + model);
             }
         }
 
@@ -83,14 +137,12 @@ public class UploaderJob extends Job {
     }
 
 
-    public void sendInfo(String imei1,String imei2,String mac, String android_id, final String sim, String activated, String model){
-        tokenDataAPIService.saveInfo(imei1, imei2, mac,android_id,sim,activated,model).enqueue(new Callback<PostUserInfo>() {
+    public void sendInfo(final Context ctx, String imei1,String imei2,String mac, String android_id, String sim1, String sim2, String activated, String model){
+        tokenDataAPIService.saveInfo(imei1, imei2, mac, android_id, sim1, sim2, activated, model).enqueue(new Callback<PostUserInfo>() {
             @Override
             public void onResponse(Call<PostUserInfo> call, Response<PostUserInfo> response) {
                 if(response.body().getCode() == 200) {
-                    editor.putLong("info_id", response.body().getStatus());
-                    editor.putString(SIM_Number, sim);
-                    editor.apply();
+                    SharedPrefUtils.setLongPreference(ctx, INFO_ID_KEY, response.body().getStatus());
                 }
             }
 
@@ -101,8 +153,8 @@ public class UploaderJob extends Job {
         });
     }
 
-    public void updateInfo(long id, String imei1,String imei2,String mac, String android_id, String sim, String activated, String model){
-        PostInfo postInfo = new PostInfo(imei1,imei2,mac,android_id,sim,activated,model);
+    public void updateInfo(long id, String imei1,String imei2,String mac, String android_id, String sim1, String sim2, String activated, String model){
+        PostInfo postInfo = new PostInfo(imei1,imei2,mac,android_id,sim1,sim2, activated,model);
         tokenDataAPIService.updateInfo(id, postInfo).enqueue(new Callback<BkashResponse>() {
             @Override
             public void onResponse(Call<BkashResponse> call, Response<BkashResponse> response) {
