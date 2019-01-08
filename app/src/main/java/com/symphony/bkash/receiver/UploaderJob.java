@@ -101,6 +101,7 @@ public class UploaderJob extends Job {
                     break;
             }
         }
+        SharedPrefUtils.setIntegerPreference(ctx, ACTIVATION_KEY, activated);
         String mac = "00:00:00:00:00";
         String modelPref = "Symphony ", model;
         model = ConnectionUtils.getSystemProperty("ro.product.device");
