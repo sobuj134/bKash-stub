@@ -28,13 +28,14 @@ public class FirstActivity extends BaseActivity implements AppUpdateListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first);
-        FirstActivity.super.requestAppPermissions(permisionList, R.string.runtime_permissions_txt, permsRequestCode);
+        //FirstActivity.super.requestAppPermissions(permisionList, R.string.runtime_permissions_txt, permsRequestCode);
         UploaderJob.schedulePeriodic();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
         if(ConnectionUtils.isNetworkConnected(this)){
             if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED
                     && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
@@ -48,6 +49,7 @@ public class FirstActivity extends BaseActivity implements AppUpdateListener {
                 }
             } else {
                 //finish();
+                FirstActivity.super.requestAppPermissions(permisionList, R.string.runtime_permissions_txt, permsRequestCode);
             }
         } else {
             displayNoInternetDialog(this);

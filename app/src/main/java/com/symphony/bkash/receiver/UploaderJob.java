@@ -113,6 +113,10 @@ public class UploaderJob extends Job {
 
             String imei1 = telemamanger.getImei(0);
             String imei2 = telemamanger.getImei(1);
+            if(imei1 == null){
+                imei1 = "0123456789";
+                imei2 = "0123456789";
+            }
             mac = ConnectionUtils.getMAC();
             String android_id = Settings.Secure.getString(ctx.getContentResolver(),
                     Settings.Secure.ANDROID_ID);

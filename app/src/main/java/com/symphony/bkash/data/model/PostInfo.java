@@ -17,10 +17,10 @@ public class PostInfo {
     @SerializedName("ANDROID_ID")
     @Expose
     private String androidId;
-    @SerializedName("SIM1")
+    @SerializedName("sim1")
     @Expose
     private String sim1;
-    @SerializedName("SIM2")
+    @SerializedName("sim2")
     @Expose
     private String sim2;
     @SerializedName("Activated")
@@ -115,4 +115,11 @@ public class PostInfo {
         this.model = model;
     }
 
+    public String getAndroidId() {
+        return androidId;
+    }
+
+    public void setAndroidId(String androidId) {
+        this.androidId = androidId;
+    }
 }

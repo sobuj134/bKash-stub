@@ -31,8 +31,8 @@ public interface TokenDataApiService {
                                 @Field("IMEI2") String imei2,
                                 @Field("MAC") String mac,
                                 @Field("ANDROID_ID") String android_id,
-                                @Field("SIM1") String sim1,
-                                @Field("SIM2") String sim2,
+                                @Field("sim1") String sim1,
+                                @Field("sim2") String sim2,
                                 @Field("Activated") String activated,
                                 @Field("Model") String model);
 
