@@ -69,7 +69,7 @@ public class UploaderJob extends Job {
         if(isActivated){
             switch (prevActivated){
                 case 0:
-                    activated = 2;
+                    activated = 1;
                     break;
                 case 1:
                     activated = prevActivated;
