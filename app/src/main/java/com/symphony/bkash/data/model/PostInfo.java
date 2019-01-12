@@ -1,5 +1,7 @@
 package com.symphony.bkash.data.model;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -23,6 +25,7 @@ public class PostInfo {
     @SerializedName("sim2")
     @Expose
     private String sim2;
+    @NonNull
     @SerializedName("Activated")
     @Expose
     private String activated;

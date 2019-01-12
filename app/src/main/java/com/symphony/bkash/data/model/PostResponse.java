@@ -3,20 +3,20 @@ package com.symphony.bkash.data.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class PostUserInfo {
-    @SerializedName("status")
+public class PostResponse {
+    @SerializedName("id")
     @Expose
-    private long status;
+    private long id;
     @SerializedName("code")
     @Expose
     private int code;
 
-    public long getStatus() {
-        return status;
+    public long getId() {
+        return id;
     }
 
-    public void setStatus(long status) {
-        this.status = status;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public int getCode() {
@@ -29,8 +29,8 @@ public class PostUserInfo {
 
     @Override
     public String toString() {
-        return "PostUserInfo{" +
-                "status=" + status +
+        return "PostResponse{" +
+                "id=" + id +
                 ", code=" + code +
                 '}';
     }

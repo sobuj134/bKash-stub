@@ -4,11 +4,9 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.symphony.bkash.listener.AppUpdateListener;
-import com.symphony.bkash.util.LoadingDialog;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -26,7 +24,6 @@ public class VersionChecker extends AsyncTask<String, String, Boolean> {
     private String packagename;
     private Context mContext;
     private String installVersion = "";
-    LoadingDialog loadingDialog;
     AppUpdateListener appUpdateListener;
 
     public VersionChecker(Context mContext, String packagename, AppUpdateListener appUpdateListener){
@@ -72,7 +69,6 @@ public class VersionChecker extends AsyncTask<String, String, Boolean> {
 
     @Override
     protected void onPostExecute(Boolean aBoolean) {
-        loadingDialog.dismiss();
         if(!aBoolean){
             appUpdateListener.onUpdate();
         }
@@ -81,7 +77,5 @@ public class VersionChecker extends AsyncTask<String, String, Boolean> {
 
     @Override
     protected void onPreExecute() {
-        loadingDialog = LoadingDialog.newInstance(mContext, "Please Wait!");
-        loadingDialog.show();
     }
 }
