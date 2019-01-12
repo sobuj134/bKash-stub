@@ -76,7 +76,7 @@ public class UploaderJobService extends JobService {
 
                     String imei1 = telemamanger.getImei(0);
                     String imei2 = telemamanger.getImei(1);
-                    if(imei1.isEmpty()){
+                    if(null == imei1 || TextUtils.isEmpty(imei1)){
                         imei1 = "123456987565";
                         imei2 = "1234567896589";
                     }

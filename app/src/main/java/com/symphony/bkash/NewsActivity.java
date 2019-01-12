@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -74,7 +73,7 @@ public class NewsActivity extends AppCompatActivity {
 
 
         if(bundle.getString("IMAGEURL") != null){
-            Picasso.with(getApplicationContext()).load(bundle.getString("IMAGEURL")).into(image_banner);
+            //Picasso.with(getApplicationContext()).load(bundle.getString("IMAGEURL")).into(image_banner);
         }
 
         body.setOnClickListener(new View.OnClickListener() {
