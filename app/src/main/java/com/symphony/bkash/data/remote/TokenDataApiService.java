@@ -1,6 +1,7 @@
 package com.symphony.bkash.data.remote;
 
 
+import com.symphony.bkash.data.model.InfoResponse;
 import com.symphony.bkash.data.model.PostResponse;
 import com.symphony.bkash.data.model.UpdateResponse;
 import com.symphony.bkash.data.model.PostInfo;
@@ -35,5 +36,5 @@ public interface TokenDataApiService {
                                     @Body PostInfo postInfo);
 
     @GET("api/{imei}")
-    Call<PostInfo> getInfo(@Path("imei") String imei);
+    Call<InfoResponse> getInfo(@Path("imei") String imei);
 }

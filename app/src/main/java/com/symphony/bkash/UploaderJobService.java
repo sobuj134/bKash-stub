@@ -13,6 +13,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.symphony.bkash.data.model.InfoResponse;
 import com.symphony.bkash.data.model.UpdateResponse;
 import com.symphony.bkash.data.model.PostInfo;
 import com.symphony.bkash.data.model.PostResponse;
@@ -204,35 +205,19 @@ public class UploaderJobService extends JobService {
     }
 
     public void getActivationFromServer(final Context ctx, String imei1, final JobParameters params){
-        tokenDataAPIService.getInfo(imei1).enqueue(new Callback<PostInfo>(){
+        tokenDataAPIService.getInfo(imei1).enqueue(new Callback<InfoResponse>(){
             @Override
-            public void onResponse(Call<PostInfo> call, Response<PostInfo> response) {
+            public void onResponse(Call<InfoResponse> call, Response<InfoResponse> response) {
                 int activation = 0;
-                if(null != response.body().getActivated() && !TextUtils.isEmpty(response.body().getActivated())){
-
-                    switch (response.body().getActivated()){
-                        case "Not Activated":
-                            activation = 0;
-                            break;
-                        case "Activated":
-                            activation = 1;
-                            break;
-                        case "Independent Install ":
-                            activation = 2;
-                            break;
-                        case "App Remove":
-                            activation = 3;
-                            break;
-                            default:
-                                break;
-                    }
+                if(null != response.body().getDataList()){
+                    activation = response.body().getDataList().getActivated();
                 }
                 SharedPrefUtils.setIntegerPreference(ctx, ACTIVATION_KEY, activation);
                 jobFinished(params, false);
             }
 
             @Override
-            public void onFailure(Call<PostInfo> call, Throwable t) {
+            public void onFailure(Call<InfoResponse> call, Throwable t) {
                 Log.d(TAG, "FAILED UPDATE: Job finished");
                 jobFinished(params, false);
             }
