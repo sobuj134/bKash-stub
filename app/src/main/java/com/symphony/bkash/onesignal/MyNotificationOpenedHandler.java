@@ -31,6 +31,16 @@ public class MyNotificationOpenedHandler implements OneSignal.NotificationOpened
         String link = result.notification.payload.launchURL;
         String activityToBeOpened;
         String packageName;
+        //If we send notification with action buttons we need to specidy the button id's and retrieve it to
+        //do the necessary operation.
+        if(actionType == OSNotificationAction.ActionType.ActionTaken){
+            Log.i("OneSignalExample", "Button pressed with id: " + result.action.actionID);
+            if (result.action.actionID.equals("ActionOne")) {
+                Toast.makeText(bKashApp.getContext(), "ActionOne Button was pressed", Toast.LENGTH_LONG).show();
+            } else if (result.action.actionID.equals("ActionTwo")) {
+                Toast.makeText(bKashApp.getContext(), "ActionTwo Button was pressed", Toast.LENGTH_LONG).show();
+            }
+        }
 
         //While sending a Push notification from OneSignal dashboard
         // you can send an addtional data named "activityToBeOpened" and retrieve the value of it and do necessary operation
@@ -55,9 +65,6 @@ public class MyNotificationOpenedHandler implements OneSignal.NotificationOpened
             if(activityToBeOpened != null && activityToBeOpened.equals("NewsActivity")){
                 Log.i("OneSignalExample", "customkey set with value: " + activityToBeOpened);
                 Intent intent = new Intent(bKashApp.getContext(), NewsActivity.class); //bKashApp.getContext()
-//                intent.putExtra("SYSTRAY","systray");
-                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-
                 // intent.putExtra("title", title);
                 //intent.putExtra("body", body);
                 intent.putExtra("title", str1);
@@ -69,18 +76,13 @@ public class MyNotificationOpenedHandler implements OneSignal.NotificationOpened
                     intent.putExtra("IMAGEURL", bigIcon);
                 }
                 bKashApp.getContext().startActivity(intent);
-            }
-
-
-            else if(activityToBeOpened != null && activityToBeOpened.equals("MainActivity")){
+            } else if(activityToBeOpened != null && activityToBeOpened.equals("MainActivity")){
                 Log.i("OneSignalExample", "customkey set with value: " + activityToBeOpened);
                 Intent intent = new Intent(bKashApp.getContext(), FirstActivity.class);
                 intent.putExtra("SYSTRAY","systray");
 //                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
                 bKashApp.getContext().startActivity(intent);
-            }
-
-            else if(activityToBeOpened != null && activityToBeOpened.equals("MediaTekFOTA")){
+            } else if(activityToBeOpened != null && activityToBeOpened.equals("MediaTekFOTA")){
                 Log.i("OneSignalExample", "customkey set with value: " + activityToBeOpened);
 
                 Intent LaunchIntent = bKashApp.getContext().getPackageManager().getLaunchIntentForPackage("com.mediatek.systemupdate");
@@ -96,25 +98,19 @@ public class MyNotificationOpenedHandler implements OneSignal.NotificationOpened
                 // intent.setComponent(new ComponentName("com.mediatek.systemupdate","com.mediatek.systemupdate.OtaPkgManagerActivity"));
                 ////  intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
                 //MySymphonyApp.getContext().startActivity(intent1);
-            }
-
-            else if(activityToBeOpened != null && activityToBeOpened.equals("SpedturmFOTA")){
+            } else if(activityToBeOpened != null && activityToBeOpened.equals("SpedturmFOTA")){
                 Log.i("OneSignalExample", "customkey set with value: " + activityToBeOpened);
                 Intent LaunchIntent = bKashApp.getContext().getPackageManager().getLaunchIntentForPackage("com.megafone.systemupdate");
                 LaunchIntent.putExtra("SYSTRAY","systray");
                 LaunchIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
                 bKashApp.getContext().startActivity(LaunchIntent);
-            }
-
-            else if(activityToBeOpened != null && activityToBeOpened.equals("UniversalFOTA")){
+            } else if(activityToBeOpened != null && activityToBeOpened.equals("UniversalFOTA")){
                 Log.i("OneSignalExample", "customkey set with value: " + activityToBeOpened);
                 Intent LaunchIntent = bKashApp.getContext().getPackageManager().getLaunchIntentForPackage("com.google.android.gms");
                 LaunchIntent.putExtra("SYSTRAY","systray");
                 LaunchIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
                 bKashApp.getContext().startActivity(LaunchIntent);
-            }
-
-            else if(link!=null){
+            } else if(link!=null){
                 Intent intent = new Intent(bKashApp.getContext(), NewsWebActivity.class);
                 Log.d("URLPush", link);
                 packageName = data.optString("packageName", null);
@@ -135,9 +131,7 @@ public class MyNotificationOpenedHandler implements OneSignal.NotificationOpened
                     bKashApp.getContext().startActivity(intent);
                 }
 
-            }
-
-            else if (action_url.length() >4 && actionType == OSNotificationAction.ActionType.ActionTaken) {
+            } else if (action_url.length() >4 && actionType == OSNotificationAction.ActionType.ActionTaken) {
 
                 Intent intent = new Intent(bKashApp.getContext(), FirstActivity.class);
 
@@ -162,16 +156,7 @@ public class MyNotificationOpenedHandler implements OneSignal.NotificationOpened
 
 
 
-        //If we send notification with action buttons we need to specidy the button id's and retrieve it to
-        //do the necessary operation.
-        if(actionType == OSNotificationAction.ActionType.ActionTaken){
-            Log.i("OneSignalExample", "Button pressed with id: " + result.action.actionID);
-            if (result.action.actionID.equals("ActionOne")) {
-                Toast.makeText(bKashApp.getContext(), "ActionOne Button was pressed", Toast.LENGTH_LONG).show();
-            } else if (result.action.actionID.equals("ActionTwo")) {
-                Toast.makeText(bKashApp.getContext(), "ActionTwo Button was pressed", Toast.LENGTH_LONG).show();
-            }
-        }
+
 
 
 

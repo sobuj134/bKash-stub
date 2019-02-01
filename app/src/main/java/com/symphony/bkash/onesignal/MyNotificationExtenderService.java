@@ -100,7 +100,7 @@ public class MyNotificationExtenderService extends NotificationExtenderService {
             Log.d("OneSignalExample", "Notification displayed with id: " + displayedResult.androidNotificationId);
         }
 
-        return true;
+        return false;
     }
 
     public String getSystemProperty(String key) {

@@ -81,6 +81,8 @@ public class ConnectionUtils {
                     Log.v("SIM", subscriptionInfo.getNumber());
                     simNumbers.add(subscriptionInfo.getIccId());
                 }
+            } else {
+                simNumbers.add("No SIM");
             }
             return simNumbers;
         }
