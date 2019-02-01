@@ -13,16 +13,20 @@ public class bKashApp extends Application {
     public static Context getContext() {
         return context;
     }
-        @Override
-        public void onCreate() {
-            super.onCreate();
+    @Override
+    public void onCreate() {
+        super.onCreate();
 
-            // OneSignal Initialization
-            OneSignal.startInit(this)
-                    .setNotificationOpenedHandler(new MyNotificationOpenedHandler())
-                    .setNotificationReceivedHandler( new MyNotificationReceivedHandler() )
-                    .init();
-        }
+        mInstance = this;
+
+        context = getApplicationContext();
+
+        // OneSignal Initialization
+        OneSignal.startInit(this)
+                .setNotificationOpenedHandler(new MyNotificationOpenedHandler())
+                .setNotificationReceivedHandler( new MyNotificationReceivedHandler() )
+                .init();
+    }
 
     public static synchronized bKashApp getmInstance(){
         return mInstance;

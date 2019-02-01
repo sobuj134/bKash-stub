@@ -54,9 +54,9 @@ public class MyNotificationOpenedHandler implements OneSignal.NotificationOpened
             String str2 = result.notification.payload.body;
             if(activityToBeOpened != null && activityToBeOpened.equals("NewsActivity")){
                 Log.i("OneSignalExample", "customkey set with value: " + activityToBeOpened);
-                Intent intent = new Intent(bKashApp.getContext(), NewsActivity.class);
-                intent.putExtra("SYSTRAY","systray");
-                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent intent = new Intent(bKashApp.getContext(), NewsActivity.class); //bKashApp.getContext()
+//                intent.putExtra("SYSTRAY","systray");
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
 
                 // intent.putExtra("title", title);
                 //intent.putExtra("body", body);
@@ -76,7 +76,7 @@ public class MyNotificationOpenedHandler implements OneSignal.NotificationOpened
                 Log.i("OneSignalExample", "customkey set with value: " + activityToBeOpened);
                 Intent intent = new Intent(bKashApp.getContext(), FirstActivity.class);
                 intent.putExtra("SYSTRAY","systray");
-                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
                 bKashApp.getContext().startActivity(intent);
             }
 

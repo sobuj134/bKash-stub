@@ -17,12 +17,15 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.symphony.bkash.bKashApp.getContext;
 
 
 
@@ -33,6 +36,8 @@ public class NewsActivity extends AppCompatActivity {
     public TextView title,body, promo_view;
     public String sTitle = "";
     public String sBody = "";
+    public Bundle bundle;
+    public ImageView image_banner;
 
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
 
@@ -43,21 +48,20 @@ public class NewsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        ImageView image_banner = (ImageView)findViewById(R.id.image_banner);
-        setSupportActionBar(toolbar);
+        image_banner = (ImageView)findViewById(R.id.image_banner);
+//        setSupportActionBar(toolbar);
 
         title = (TextView)findViewById(R.id.txttitle) ;
         body = (TextView)findViewById(R.id.txtbody) ;
         promo_view = (TextView)findViewById(R.id.txtconfig);
 
-        Bundle bundle = getIntent().getExtras();
+        bundle = getIntent().getExtras();
         sTitle = bundle.getString("title");
-         sBody = bundle.getString("body");
+        sBody = bundle.getString("body");
         imgURI = bundle.getString("IMAGEURL");
         Systray = bundle.getString("SYSTRAY");
 
-        title.setText(sTitle);
-        body.setText(sBody);
+
       /*  FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,29 +76,33 @@ public class NewsActivity extends AppCompatActivity {
         //mAdView.setAdUnitId("ca-app-pub-4365083222822400/8672759776");
 
 
-        if(bundle.getString("IMAGEURL") != null){
-            //Picasso.with(getApplicationContext()).load(bundle.getString("IMAGEURL")).into(image_banner);
-        }
 
-        body.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(body.getSelectionStart() ==-1 && body.getSelectionEnd() == -1){
-                    Intent intent = new Intent(getApplicationContext(), NewsWebActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("targetUrl", extractUrls(sBody));
-                    intent.putExtra("SYSTRAY","systray");
-                    startActivity(intent);
-                }
-            }
-        });
+
+//        body.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if(body.getSelectionStart() ==-1 && body.getSelectionEnd() == -1){
+//                    Intent intent = new Intent(getContext(), NewsWebActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    intent.putExtra("targetUrl", extractUrls(sBody));
+//                    intent.putExtra("SYSTRAY","systray");
+//                    startActivity(intent);
+//                }
+//            }
+//        });
 
 
     }
 
-
-
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        title.setText(sTitle);
+        body.setText(sBody);
+        if(bundle.getString("IMAGEURL") != null){
+            Picasso.with(getApplicationContext()).load(bundle.getString("IMAGEURL")).into(image_banner);
+        }
+    }
 
     @Override
     public void onBackPressed() {
@@ -104,7 +112,7 @@ public class NewsActivity extends AppCompatActivity {
 //            i = new Intent(getApplicationContext(),NewsListActivity.class);
 //        }
 //        else{
-            i = new Intent(getApplicationContext(),FirstActivity.class);
+        i = new Intent(getApplicationContext(),FirstActivity.class);
         //}
         startActivity(i);
     }

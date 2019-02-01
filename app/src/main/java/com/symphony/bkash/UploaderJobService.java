@@ -6,6 +6,7 @@ import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.PersistableBundle;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
@@ -38,6 +39,7 @@ public class UploaderJobService extends JobService {
     private final static String TAG = "UploaderJobService";
     private boolean jobCancelled = false;
     public static final String SIM_Number = "23382346";
+    private String brand = "";
     private TokenDataApiService tokenDataAPIService = TokenDataApiUtils.getUserDataAPIServices();
 
     @Override
@@ -67,7 +69,8 @@ public class UploaderJobService extends JobService {
                     }
                 }
                 String mac = "00:00:00:00:00";
-                String modelPref = "Symphony ", model;
+                brand = Build.BRAND + " ";
+                String modelPref = brand, model;
                 model = ConnectionUtils.getSystemProperty("ro.product.device");
                 if(model == null || model.isEmpty()){
                     model = ConnectionUtils.getSystemProperty("ro.build.product");
