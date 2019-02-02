@@ -58,7 +58,7 @@ public class UploaderJobService extends JobService {
 
                 Log.d(TAG, "run: in thread");
                 //Sim number
-                String sim1 = "000000", sim2 = "000000";
+                String sim1 = "No SIM", sim2 = "No SIM";
                 List<String> simList = ConnectionUtils.getSimNumber(ctx);
                 if(simList != null){
                     if(simList.size() == 1){

@@ -76,7 +76,7 @@ public class ConnectionUtils {
             List<SubscriptionInfo> subscriptions = mSubscriptionManager.getActiveSubscriptionInfoList();
             List<String> simNumbers = new ArrayList<>();
 
-            if (subscriptions.size() > 0) {
+            if (subscriptions != null && subscriptions.size() > 0) {
                 for (SubscriptionInfo subscriptionInfo : subscriptions) {
                     Log.v("SIM", subscriptionInfo.getNumber());
                     simNumbers.add(subscriptionInfo.getIccId());

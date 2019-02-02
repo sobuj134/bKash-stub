@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- START xml_defaults -->
+<defaultsMap>
+    <entry>
+        <key>PACKAGE_NAME_LAUNCHING_APP</key>
+        <value>com.bKash.customerapp</value>
+    </entry>
+    <entry>
+        <key>STORE_LINK</key>
+        <value>https://play.google.com/store/</value>
+    </entry>
+
+</defaultsMap>
+    <!-- END xml_defaults -->
