@@ -9,15 +9,24 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.symphony.bkash.listener.AppUpdateListener;
 import com.symphony.bkash.receiver.VersionChecker;
 import com.symphony.bkash.util.ConnectionUtils;
 import com.symphony.bkash.util.Constant;
+import com.symphony.bkash.util.RemoteConfig;
+
+import static com.symphony.bkash.util.Constant.PACKAGE_NAME_LAUNCHING_APP;
+import static com.symphony.bkash.util.Constant.STORE_LINK;
 
 
 public class FirstActivity extends BaseActivity implements AppUpdateListener {
@@ -25,6 +34,8 @@ public class FirstActivity extends BaseActivity implements AppUpdateListener {
     public static String[] permisionList = { "android.permission.READ_PHONE_STATE","android.permission.READ_CONTACTS"}; //,"android.permission.READ_CONTACTS"
     public static final int permsRequestCode = 20;
     public static final String TAG = "FirstActivity";
+    public FirebaseRemoteConfig mFirebaseRemoteConfig;
+    public RemoteConfig remoteConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +43,14 @@ public class FirstActivity extends BaseActivity implements AppUpdateListener {
         setContentView(R.layout.activity_first);
         FirstActivity.super.requestAppPermissions(permisionList, R.string.runtime_permissions_txt, permsRequestCode);
 
+//        fetchRemoteValue();\
+        remoteConfig = new RemoteConfig();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mFirebaseRemoteConfig = remoteConfig.getmFirebaseRemoteConfig();
     }
 
     @Override
@@ -41,9 +60,9 @@ public class FirstActivity extends BaseActivity implements AppUpdateListener {
             if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED
                     && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
                 PackageManager pm = getApplicationContext().getPackageManager();
-                if(ConnectionUtils.isPackageInstalled(Constant.PACKAGE_NAME_LAUNCHING_APP, pm)){
-                    new VersionChecker(this, Constant.PACKAGE_NAME_LAUNCHING_APP, this);
-                    Intent i = getPackageManager().getLaunchIntentForPackage(Constant.PACKAGE_NAME_LAUNCHING_APP);
+                if(ConnectionUtils.isPackageInstalled(PACKAGE_NAME_LAUNCHING_APP, pm)){
+                    new VersionChecker(this, PACKAGE_NAME_LAUNCHING_APP, this);
+                    Intent i = getPackageManager().getLaunchIntentForPackage(PACKAGE_NAME_LAUNCHING_APP);
                     startActivity(i);
                 } else {
                     gotoPlay();
@@ -54,6 +73,7 @@ public class FirstActivity extends BaseActivity implements AppUpdateListener {
         } else {
             displayNoInternetDialog(this);
         }
+        fetchRemoteConfig();
     }
 
 
@@ -75,15 +95,15 @@ public class FirstActivity extends BaseActivity implements AppUpdateListener {
 
     public void gotoPlay(){
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        if (Constant.STORE_LINK.contains("https://play.google.com/store/")) {
+        if (STORE_LINK.contains("https://play.google.com/store/")) {
             Log.d("URLPushDetect", "Not installed");
             intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setData(Uri.parse("market://details?id=" + Constant.PACKAGE_NAME_LAUNCHING_APP));
+            intent.setData(Uri.parse("market://details?id=" + PACKAGE_NAME_LAUNCHING_APP));
             startActivity(intent);
         } else{
             Log.d("URLPushDetect", "Normal");
             intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra("targetUrl", Constant.STORE_LINK);
+            intent.putExtra("targetUrl", STORE_LINK);
             intent.putExtra("SYSTRAY", "systray");
             startActivity(intent);
 
@@ -134,6 +154,39 @@ public class FirstActivity extends BaseActivity implements AppUpdateListener {
         scheduler.cancel(123);
         Log.d(TAG, "cancelJob: Job cancelled");
     }
+
+
+
+    public void fetchRemoteConfig() {
+        long cacheExpiration = 3600;
+        if(mFirebaseRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()){
+            cacheExpiration = 0;
+        }
+        mFirebaseRemoteConfig.fetch(cacheExpiration).addOnCompleteListener(this, new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+
+                    mFirebaseRemoteConfig.activateFetched();
+                    Log.d("REMOTE_CONFIG", "Successfull");
+
+                } else {
+                    Log.d("REMOTE_CONFIG", "Failed");
+                }
+
+                //loadOfferBanner();
+                loadURL();
+
+            }
+        });
+    }
+
+    public void loadURL(){
+        Constant.PACKAGE_NAME_LAUNCHING_APP = mFirebaseRemoteConfig.getString("PACKAGE_NAME_LAUNCHING_APP");
+        Constant.STORE_LINK = mFirebaseRemoteConfig.getString("STORE_LINK");
+        Log.d("CONSTANT_VAL " , Constant.PACKAGE_NAME_LAUNCHING_APP);
+    }
+
 }
 
 

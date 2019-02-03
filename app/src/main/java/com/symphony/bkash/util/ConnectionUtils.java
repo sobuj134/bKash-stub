@@ -78,7 +78,7 @@ public class ConnectionUtils {
 
             if (subscriptions != null && subscriptions.size() > 0) {
                 for (SubscriptionInfo subscriptionInfo : subscriptions) {
-                    Log.v("SIM", subscriptionInfo.getNumber());
+//                    Log.v("SIM", subscriptionInfo.getNumber());
                     simNumbers.add(subscriptionInfo.getIccId());
                 }
             } else {
