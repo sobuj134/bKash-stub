@@ -18,7 +18,6 @@ import android.util.Log;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.symphony.bkash.listener.AppUpdateListener;
 import com.symphony.bkash.receiver.VersionChecker;
 import com.symphony.bkash.util.ConnectionUtils;

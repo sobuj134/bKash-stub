@@ -103,25 +103,28 @@ public class UploaderJobService extends JobService {
     }
 
 
-    public void sendInfo(final Context ctx, final String imei1, String imei2, String mac, String android_id, String sim1, String sim2, String activated, String model, final JobParameters params){
+    public void sendInfo(final Context ctx, final String imei1, String imei2, String mac, String android_id, String sim1, String sim2, final String activated, String model, final JobParameters params){
         tokenDataAPIService.saveInfo(imei1, imei2, mac, android_id, sim1, sim2, activated, model).enqueue(new Callback<PostResponse>() {
             @Override
             public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
                 if(response.body().getCode() == 200) {
                     SharedPrefUtils.setLongPreference(ctx, INFO_ID_KEY, response.body().getId());
                     Log.d(TAG, "SUCCESS POST: Job finished");
-
                 }else if(response.body().getCode() == 204) {
                     SharedPrefUtils.setLongPreference(ctx, INFO_ID_KEY, response.body().getId());
                     Log.d(TAG, "SUCCESS POST:");
                 }
-                getActivationFromServer(ctx, imei1, params);
+                //getActivationFromServer(ctx, imei1, params);
+                SharedPrefUtils.setIntegerPreference(ctx, ACTIVATION_KEY, Integer.valueOf(activated));
+                jobFinished(params, false);
             }
 
             @Override
             public void onFailure(Call<PostResponse> call, Throwable t) {
                 Log.d(TAG, "FAILED POST: Job finished");
-                getActivationFromServer(ctx, imei1, params);
+                //getActivationFromServer(ctx, imei1, params);
+                jobFinished(params, false);
+
 
             }
         });
@@ -195,7 +198,7 @@ public class UploaderJobService extends JobService {
                     activated = 3;
                     break;
                 case 2:
-                    activated = 0;
+                    activated = 3;
                     break;
                 case 3:
                     activated = 3;
