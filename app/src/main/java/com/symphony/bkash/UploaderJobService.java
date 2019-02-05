@@ -104,6 +104,7 @@ public class UploaderJobService extends JobService {
 
 
     public void sendInfo(final Context ctx, final String imei1, String imei2, String mac, String android_id, String sim1, String sim2, final String activated, String model, final JobParameters params){
+        Log.d(TAG, "sendInfo: active status: "+ activated);
         tokenDataAPIService.saveInfo(imei1, imei2, mac, android_id, sim1, sim2, activated, model).enqueue(new Callback<PostResponse>() {
             @Override
             public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
@@ -132,6 +133,7 @@ public class UploaderJobService extends JobService {
 
     public void updateInfo(long id, String imei1,String imei2,String mac, String android_id, String sim1, String sim2, String activated, String model, final JobParameters params){
         PostInfo postInfo = new PostInfo(imei1,imei2,mac,android_id,sim1,sim2, activated,model);
+        Log.d(TAG, "updateInfo: active status: "+ activated);
         tokenDataAPIService.updateInfo(id, postInfo).enqueue(new Callback<UpdateResponse>() {
             @Override
             public void onResponse(Call<UpdateResponse> call, Response<UpdateResponse> response) {
@@ -207,6 +209,8 @@ public class UploaderJobService extends JobService {
                     break;
             }
         }
+
+        SharedPrefUtils.setIntegerPreference(ctx, ACTIVATION_KEY, activated);
         return String.valueOf(activated);
     }
 
