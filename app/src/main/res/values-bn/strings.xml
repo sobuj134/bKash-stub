@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">ইনস্টল বিকাশ অ্যাপ</string>
+
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="send_to_news">এই শেয়ার করুন...</string>
+    <string name="sent_from">Sent from bKash</string>
+    <string name="no_connection_title">কোন ইন্টারনেট নেই!!</string>
+    <string name="no_connection_msg">ইন্টারনেটের সাথে সংযোগ করুন</string>
+    <string name="dialog_ok">ঠিক আছে</string>
+    <string name="invitation_deep_link">https://pcv59.app.goo.gl/vQaV</string>
+
+    <string name="runtime_permissions_txt">অ্যাপ্লিকেশন সেটিংস থেকে সব অনুমতি সক্রিয় করুন</string>
+</resources>
