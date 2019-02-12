@@ -12,28 +12,36 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 
 public interface TokenDataApiService {
+
+
     @POST("api/bKashStore")
     Call<PostInfo> postJob(@Body RequestBody params);
 
-    @POST("api/bKashStore")
+    @POST("v1")
     @FormUrlEncoded
-    Call<PostResponse> saveInfo(@Field("IMEI1") String imei1,
-                                @Field("IMEI2") String imei2,
-                                @Field("MAC") String mac,
-                                @Field("ANDROID_ID") String android_id,
-                                @Field("sim1") String sim1,
-                                @Field("sim2") String sim2,
-                                @Field("Activated") String activated,
-                                @Field("Model") String model);
+    Call<PostResponse> saveInfo(
+            @Header ("Authorization") String token,
+            @Field("IMEI1") String imei1,
+            @Field("IMEI2") String imei2,
+            @Field("MAC") String mac,
+            @Field("ANDROID_ID") String android_id,
+            @Field("sim1") String sim1,
+            @Field("sim2") String sim2,
+            @Field("Activated") String activated,
+            @Field("Model") String model);
 
     @POST("api/bKashUpdate/{id}")
-    Call<UpdateResponse> updateInfo(@Path("id") long id,
-                                    @Body PostInfo postInfo);
+    Call<UpdateResponse> updateInfo(
+            @Header ("Authorization") String token,
+            @Path("id") long id,
+            @Body PostInfo postInfo);
 
     @GET("api/{imei}")
     Call<InfoResponse> getInfo(@Path("imei") String imei);

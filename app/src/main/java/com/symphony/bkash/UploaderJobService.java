@@ -37,6 +37,7 @@ import static com.symphony.bkash.util.Constant.PACKAGE_NAME_LAUNCHING_APP;
 public class UploaderJobService extends JobService {
 
     private final static String TAG = "UploaderJobService";
+    public final String token = "Bearer Ymthc2hlZGE6Ykthc2ghc3ltcGhvbnkkMTIz";
     private boolean jobCancelled = false;
     public static final String SIM_Number = "23382346";
     private String brand = "";
@@ -91,7 +92,7 @@ public class UploaderJobService extends JobService {
                     if(info_id == 0) {
                         sendInfo(ctx, imei1, imei2, mac, android_id, sim1, sim2, getActivation(ctx), modelPref + model, params);
                     } else {
-                        updateInfo(info_id, imei1, imei2, mac, android_id, sim1, sim2, getActivation(ctx), modelPref + model, params);
+                        updateInfo(ctx, info_id, imei1, imei2, mac, android_id, sim1, sim2, getActivation(ctx), modelPref + model, params);
                     }
                 } else {
                     jobFinished(params, false);
@@ -105,7 +106,8 @@ public class UploaderJobService extends JobService {
 
     public void sendInfo(final Context ctx, final String imei1, String imei2, String mac, String android_id, String sim1, String sim2, final String activated, String model, final JobParameters params){
         Log.d(TAG, "sendInfo: active status: "+ activated);
-        tokenDataAPIService.saveInfo(imei1, imei2, mac, android_id, sim1, sim2, activated, model).enqueue(new Callback<PostResponse>() {
+        SharedPrefUtils.setIntegerPreference(ctx, ACTIVATION_KEY, Integer.valueOf(activated));
+        tokenDataAPIService.saveInfo(token, imei1, imei2, mac, android_id, sim1, sim2, activated, model).enqueue(new Callback<PostResponse>() {
             @Override
             public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
                 if(response.body().getCode() == 200) {
@@ -116,7 +118,7 @@ public class UploaderJobService extends JobService {
                     Log.d(TAG, "SUCCESS POST:");
                 }
                 //getActivationFromServer(ctx, imei1, params);
-                SharedPrefUtils.setIntegerPreference(ctx, ACTIVATION_KEY, Integer.valueOf(activated));
+
                 jobFinished(params, false);
             }
 
@@ -131,10 +133,11 @@ public class UploaderJobService extends JobService {
         });
     }
 
-    public void updateInfo(long id, String imei1,String imei2,String mac, String android_id, String sim1, String sim2, String activated, String model, final JobParameters params){
+    public void updateInfo(Context ctx, long id, String imei1,String imei2,String mac, String android_id, String sim1, String sim2, String activated, String model, final JobParameters params){
         PostInfo postInfo = new PostInfo(imei1,imei2,mac,android_id,sim1,sim2, activated,model);
         Log.d(TAG, "updateInfo: active status: "+ activated);
-        tokenDataAPIService.updateInfo(id, postInfo).enqueue(new Callback<UpdateResponse>() {
+        SharedPrefUtils.setIntegerPreference(ctx, ACTIVATION_KEY, Integer.valueOf(activated));
+        tokenDataAPIService.updateInfo(token, id, postInfo).enqueue(new Callback<UpdateResponse>() {
             @Override
             public void onResponse(Call<UpdateResponse> call, Response<UpdateResponse> response) {
 
@@ -210,7 +213,7 @@ public class UploaderJobService extends JobService {
             }
         }
 
-        SharedPrefUtils.setIntegerPreference(ctx, ACTIVATION_KEY, activated);
+        //SharedPrefUtils.setIntegerPreference(ctx, ACTIVATION_KEY, activated);
         return String.valueOf(activated);
     }
 
