@@ -39,7 +39,7 @@ public class FirstActivity extends BaseActivity implements AppUpdateListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_first);
+        //setContentView(R.layout.activity_first);
         FirstActivity.super.requestAppPermissions(permisionList, R.string.runtime_permissions_txt, permsRequestCode);
 
 //        fetchRemoteValue();\
