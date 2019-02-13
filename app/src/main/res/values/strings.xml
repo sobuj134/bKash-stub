@@ -9,6 +9,9 @@
     <string name="no_connection_msg">Please connect with internet.</string>
     <string name="dialog_ok">Ok</string>
     <string name="invitation_deep_link">https://pcv59.app.goo.gl/vQaV</string>
+    <string name="not_eligible">Your handset is not eligible!!!</string>
+    <string name="not_eligible_msg">Please use any eligible handset</string>
+
 
     <string name="runtime_permissions_txt">Please enable ALL permissions from app settings</string>
 </resources>

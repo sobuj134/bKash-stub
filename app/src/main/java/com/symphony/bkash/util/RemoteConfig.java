@@ -23,4 +23,21 @@ public class RemoteConfig {
 
         return  mFirebaseRemoteConfig;
     }
+
+    public String getModelName(){
+        String modelName = getSystemProperty("ro.product.device") ;
+        return modelName;
+    }
+    public String getSystemProperty(String key) {
+        String value = null;
+
+        try {
+            value = (String) Class.forName("android.os.SystemProperties")
+                    .getMethod("get", String.class).invoke(null, key);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return value;
+    }
 }

@@ -9,6 +9,13 @@
         <key>STORE_LINK</key>
         <value>https://play.google.com/store/</value>
     </entry>
-
+    <entry>
+        <key>ALLOWED_DEVICES</key>
+        <value>i72</value>
+    </entry>
+    <entry>
+        <key>RESTRICTION</key>
+        <value>false</value>
+    </entry>
 </defaultsMap>
     <!-- END xml_defaults -->

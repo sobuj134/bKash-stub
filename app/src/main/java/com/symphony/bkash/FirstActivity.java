@@ -24,6 +24,9 @@ import com.symphony.bkash.util.ConnectionUtils;
 import com.symphony.bkash.util.Constant;
 import com.symphony.bkash.util.RemoteConfig;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static com.symphony.bkash.util.Constant.PACKAGE_NAME_LAUNCHING_APP;
 import static com.symphony.bkash.util.Constant.STORE_LINK;
 
@@ -44,6 +47,7 @@ public class FirstActivity extends BaseActivity implements AppUpdateListener {
 
 //        fetchRemoteValue();\
         remoteConfig = new RemoteConfig();
+        
     }
 
     @Override
@@ -174,6 +178,7 @@ public class FirstActivity extends BaseActivity implements AppUpdateListener {
                 }
 
                 //loadOfferBanner();
+                eligibleHandset(FirstActivity.this);
                 loadURL();
 
             }
@@ -184,6 +189,38 @@ public class FirstActivity extends BaseActivity implements AppUpdateListener {
         Constant.PACKAGE_NAME_LAUNCHING_APP = mFirebaseRemoteConfig.getString("PACKAGE_NAME_LAUNCHING_APP");
         Constant.STORE_LINK = mFirebaseRemoteConfig.getString("STORE_LINK");
         Log.d("CONSTANT_VAL " , Constant.PACKAGE_NAME_LAUNCHING_APP);
+    }
+
+    public void eligibleHandset(final Activity activity) {
+        boolean modelExists = false;
+        boolean isRestrictionOn = mFirebaseRemoteConfig.getBoolean("RESTRICTION");
+        String allowedDevices = mFirebaseRemoteConfig.getString("ALLOWED_DEVICES");
+        List<String> restricted_device_list = Arrays.asList(allowedDevices.split("\\s*,\\s*"));
+        if(isRestrictionOn){
+            modelExists = restricted_device_list.contains(remoteConfig.getModelName());
+            if(modelExists){
+                return ;
+            }
+            else{
+                final AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+                alert.setCancelable(false);
+                alert.setTitle(getString(R.string.not_eligible));
+                alert.setMessage(getString(R.string.not_eligible_msg));
+                alert.setPositiveButton(getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        dialog.dismiss();
+                        activity.finish();
+
+                    }
+                });
+                alert.show();
+                finish();
+            }
+        }
+
+        else{
+            return;
+        }
     }
 
 }
