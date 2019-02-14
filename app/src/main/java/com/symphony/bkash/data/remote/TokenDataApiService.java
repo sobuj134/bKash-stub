@@ -37,7 +37,7 @@ public interface TokenDataApiService {
             @Field("Activated") String activated,
             @Field("Model") String model);
 
-    @POST("api/bKashUpdate/{id}")
+    @POST("v1/{id}")
     Call<UpdateResponse> updateInfo(
             @Header ("Authorization") String token,
             @Path("id") long id,
