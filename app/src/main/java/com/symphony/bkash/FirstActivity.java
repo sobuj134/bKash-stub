@@ -2,18 +2,28 @@ package com.symphony.bkash;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -47,7 +57,7 @@ public class FirstActivity extends BaseActivity implements AppUpdateListener {
 
 //        fetchRemoteValue();\
         remoteConfig = new RemoteConfig();
-        
+
     }
 
     @Override
@@ -202,6 +212,7 @@ public class FirstActivity extends BaseActivity implements AppUpdateListener {
                 return ;
             }
             else{
+                sendNotification();
                 final AlertDialog.Builder alert = new AlertDialog.Builder(activity);
                 alert.setCancelable(false);
                 alert.setTitle(getString(R.string.not_eligible));
@@ -214,13 +225,47 @@ public class FirstActivity extends BaseActivity implements AppUpdateListener {
                     }
                 });
                 alert.show();
-                finish();
+                activity.finish();
+                Toast.makeText(getApplicationContext(), getText(R.string.not_eligible),Toast.LENGTH_LONG).show();
             }
         }
 
         else{
             return;
         }
+    }
+
+    public void sendNotification() {
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        String NOTIFICATION_CHANNEL_ID = "my_channel_id_01";
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "My Notifications", NotificationManager.IMPORTANCE_MAX);
+
+            // Configure the notification channel.
+            notificationChannel.setDescription("Channel description");
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
+            notificationChannel.enableVibration(true);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
+
+        notificationBuilder.setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setTicker("Hearty365")
+                //     .setPriority(Notification.PRIORITY_MAX)
+                .setContentTitle(getText(R.string.not_eligible))
+                .setContentText(getText(R.string.not_eligible_msg))
+                .setContentInfo("Info");
+
+        notificationManager.notify(/*notification id*/1, notificationBuilder.build());
     }
 
 }
