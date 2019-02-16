@@ -42,6 +42,7 @@ public class UploaderJobService extends JobService {
     public static final String SIM_Number = "23382346";
     private String brand = "";
     private TokenDataApiService tokenDataAPIService = TokenDataApiUtils.getUserDataAPIServices();
+    private TokenDataApiService tokenDataAPIServiceLocal = TokenDataApiUtils.getUserDataAPIServicesLocal();
 
     @Override
     public boolean onStartJob(JobParameters params) {
@@ -104,7 +105,7 @@ public class UploaderJobService extends JobService {
     }
 
 
-    public void sendInfo(final Context ctx, final String imei1, String imei2, String mac, String android_id, String sim1, String sim2, final String activated, String model, final JobParameters params){
+    public void sendInfo(final Context ctx, final String imei1, final String imei2, final String mac, final String android_id, final String sim1, final String sim2, final String activated, final String model, final JobParameters params){
         Log.d(TAG, "sendInfo: active status: "+ activated);
         SharedPrefUtils.setIntegerPreference(ctx, ACTIVATION_KEY, Integer.valueOf(activated));
         tokenDataAPIService.saveInfo(token, imei1, imei2, mac, android_id, sim1, sim2, activated, model).enqueue(new Callback<PostResponse>() {
@@ -117,8 +118,32 @@ public class UploaderJobService extends JobService {
                     SharedPrefUtils.setLongPreference(ctx, INFO_ID_KEY, response.body().getId());
                     Log.d(TAG, "SUCCESS POST:");
                 }
-                //getActivationFromServer(ctx, imei1, params);
+                sendInfoLocal(ctx, imei1, imei2, mac, android_id, sim1, sim2, activated, model, params);
+            }
 
+            @Override
+            public void onFailure(Call<PostResponse> call, Throwable t) {
+                Log.d(TAG, "FAILED POST: Job finished");
+                //getActivationFromServer(ctx, imei1, params);
+                jobFinished(params, false);
+                sendInfoLocal(ctx, imei1, imei2, mac, android_id, sim1, sim2, activated, model, params);
+            }
+        });
+    }
+
+    public void  sendInfoLocal(final Context ctx, final String imei1, String imei2, String mac, String android_id, String sim1, String sim2, final String activated, String model, final JobParameters params){
+        Log.d(TAG, "sendInfo: active status: "+ activated);
+        //SharedPrefUtils.setIntegerPreference(ctx, ACTIVATION_KEY, Integer.valueOf(activated));
+        tokenDataAPIServiceLocal.saveInfoLocal(imei1, imei2, mac, android_id, sim1, sim2, activated, model).enqueue(new Callback<PostResponse>() {
+            @Override
+            public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
+                if(response.body().getCode() == 200) {
+                    SharedPrefUtils.setLongPreference(ctx, INFO_ID_KEY, response.body().getId());
+                    Log.d(TAG, "SUCCESS POST: Job finished");
+                }else if(response.body().getCode() == 204) {
+                    SharedPrefUtils.setLongPreference(ctx, INFO_ID_KEY, response.body().getId());
+                    Log.d(TAG, "SUCCESS POST:");
+                }
                 jobFinished(params, false);
             }
 
@@ -133,11 +158,32 @@ public class UploaderJobService extends JobService {
         });
     }
 
-    public void updateInfo(Context ctx, long id, String imei1,String imei2,String mac, String android_id, String sim1, String sim2, String activated, String model, final JobParameters params){
-        PostInfo postInfo = new PostInfo(imei1,imei2,mac,android_id,sim1,sim2, activated,model);
+    public void updateInfo(Context ctx, final long id, final String imei1,final String imei2,final String mac, final String android_id, final String sim1, final String sim2, final String activated, final String model, final JobParameters params){
+        final PostInfo postInfo = new PostInfo(imei1,imei2,mac,android_id,sim1,sim2, activated,model);
         Log.d(TAG, "updateInfo: active status: "+ activated);
         SharedPrefUtils.setIntegerPreference(ctx, ACTIVATION_KEY, Integer.valueOf(activated));
         tokenDataAPIService.updateInfo(token, id, postInfo).enqueue(new Callback<UpdateResponse>() {
+            @Override
+            public void onResponse(Call<UpdateResponse> call, Response<UpdateResponse> response) {
+
+                if(response.body().getCode().equals("200")){
+                    Log.d(TAG, "SUCCESS UPDATE: Job finished");
+                }
+                updateInfoLocal(id, postInfo, params);
+            }
+
+            @Override
+            public void onFailure(Call<UpdateResponse> call, Throwable t) {
+                Log.d(TAG, "FAILED UPDATE: Job finished");
+                jobFinished(params, false);
+                updateInfoLocal(id, postInfo, params);
+            }
+        });
+    }
+
+    public void updateInfoLocal(long id, final PostInfo postInfo, final JobParameters params){
+
+        tokenDataAPIServiceLocal.updateInfoLocal(id, postInfo).enqueue(new Callback<UpdateResponse>() {
             @Override
             public void onResponse(Call<UpdateResponse> call, Response<UpdateResponse> response) {
 
@@ -217,7 +263,7 @@ public class UploaderJobService extends JobService {
         return String.valueOf(activated);
     }
 
-    public void getActivationFromServer(final Context ctx, String imei1, final JobParameters params){
+   /* public void getActivationFromServer(final Context ctx, String imei1, final JobParameters params){
         tokenDataAPIService.getInfo(imei1).enqueue(new Callback<InfoResponse>(){
             @Override
             public void onResponse(Call<InfoResponse> call, Response<InfoResponse> response) {
@@ -235,5 +281,5 @@ public class UploaderJobService extends JobService {
                 jobFinished(params, false);
             }
         });
-    }
+    }*/
 }

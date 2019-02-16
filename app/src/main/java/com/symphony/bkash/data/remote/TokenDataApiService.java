@@ -38,8 +38,27 @@ public interface TokenDataApiService {
             @Field("Model") String model);
 
     @POST("v1/{id}")
+    @FormUrlEncoded
     Call<UpdateResponse> updateInfo(
             @Header ("Authorization") String token,
+            @Path("id") long id,
+            @Body PostInfo postInfo);
+
+    @POST("api/bKashStore")
+    @FormUrlEncoded
+    Call<PostResponse> saveInfoLocal(
+            @Field("IMEI1") String imei1,
+            @Field("IMEI2") String imei2,
+            @Field("MAC") String mac,
+            @Field("ANDROID_ID") String android_id,
+            @Field("sim1") String sim1,
+            @Field("sim2") String sim2,
+            @Field("Activated") String activated,
+            @Field("Model") String model);
+
+    @POST("api/bKashUpdate/{id}")
+    @FormUrlEncoded
+    Call<UpdateResponse> updateInfoLocal(
             @Path("id") long id,
             @Body PostInfo postInfo);
 
