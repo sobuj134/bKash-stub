@@ -16,6 +16,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Url;
 
 
 public interface TokenDataApiService {
@@ -44,9 +45,9 @@ public interface TokenDataApiService {
             @Path("id") long id,
             @Body PostInfo postInfo);
 
-    @POST("api/bKashStore")
+    @POST
     @FormUrlEncoded
-    Call<PostResponse> saveInfoLocal(
+    Call<PostResponse> saveInfoLocal(@Url String url,
             @Field("IMEI1") String imei1,
             @Field("IMEI2") String imei2,
             @Field("MAC") String mac,
@@ -56,9 +57,10 @@ public interface TokenDataApiService {
             @Field("Activated") String activated,
             @Field("Model") String model);
 
-    @POST("api/bKashUpdate/{id}")
+    @POST
     @FormUrlEncoded
     Call<UpdateResponse> updateInfoLocal(
+	@Url String url,
             @Path("id") long id,
             @Body PostInfo postInfo);
 

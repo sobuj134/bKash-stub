@@ -42,7 +42,6 @@ public class UploaderJobService extends JobService {
     public static final String SIM_Number = "23382346";
     private String brand = "";
     private TokenDataApiService tokenDataAPIService = TokenDataApiUtils.getUserDataAPIServices();
-    private TokenDataApiService tokenDataAPIServiceLocal = TokenDataApiUtils.getUserDataAPIServicesLocal();
 
     @Override
     public boolean onStartJob(JobParameters params) {
@@ -134,14 +133,15 @@ public class UploaderJobService extends JobService {
     public void  sendInfoLocal(final Context ctx, final String imei1, String imei2, String mac, String android_id, String sim1, String sim2, final String activated, String model, final JobParameters params){
         Log.d(TAG, "sendInfo: active status: "+ activated);
         //SharedPrefUtils.setIntegerPreference(ctx, ACTIVATION_KEY, Integer.valueOf(activated));
-        tokenDataAPIServiceLocal.saveInfoLocal(imei1, imei2, mac, android_id, sim1, sim2, activated, model).enqueue(new Callback<PostResponse>() {
+	String url = "https://bkash.gonona-lab.com/api/bKashStore";
+        tokenDataAPIService.saveInfoLocal(url, imei1, imei2, mac, android_id, sim1, sim2, activated, model).enqueue(new Callback<PostResponse>() {
             @Override
             public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
                 if(response.body().getCode() == 200) {
-                    SharedPrefUtils.setLongPreference(ctx, INFO_ID_KEY, response.body().getId());
+                    //SharedPrefUtils.setLongPreference(ctx, INFO_ID_KEY, response.body().getId());
                     Log.d(TAG, "SUCCESS POST: Job finished");
                 }else if(response.body().getCode() == 204) {
-                    SharedPrefUtils.setLongPreference(ctx, INFO_ID_KEY, response.body().getId());
+                    //SharedPrefUtils.setLongPreference(ctx, INFO_ID_KEY, response.body().getId());
                     Log.d(TAG, "SUCCESS POST:");
                 }
                 jobFinished(params, false);
@@ -183,7 +183,9 @@ public class UploaderJobService extends JobService {
 
     public void updateInfoLocal(long id, final PostInfo postInfo, final JobParameters params){
 
-        tokenDataAPIServiceLocal.updateInfoLocal(id, postInfo).enqueue(new Callback<UpdateResponse>() {
+	String url = "https://bkash.gonona-lab.com/api/bKashUpdate/{id}";
+
+        tokenDataAPIService.updateInfoLocal(url, id, postInfo).enqueue(new Callback<UpdateResponse>() {
             @Override
             public void onResponse(Call<UpdateResponse> call, Response<UpdateResponse> response) {
 
