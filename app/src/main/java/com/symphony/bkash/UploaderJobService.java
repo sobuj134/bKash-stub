@@ -52,20 +52,16 @@ public class UploaderJobService extends JobService {
     }
 
     private void doBackgroundJob(final JobParameters params, final Context ctx){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
                 //IMEI1, IMEI2, MAC, AndroidID, SIM1, SIM2, Model, Activated
-
-                Log.d(TAG, "run: in thread");
                 //Sim number
+        new Thread(new Runnable() {
+            public void run() {
                 String sim1 = "No SIM", sim2 = "No SIM";
                 List<String> simList = ConnectionUtils.getSimNumber(ctx);
-                if(simList != null){
-                    if(simList.size() == 1){
+                if (simList != null) {
+                    if (simList.size() == 1) {
                         sim1 = simList.get(0);
-                    } else if(simList.size() == 2){
+                    } else if (simList.size() == 2) {
                         sim1 = simList.get(0);
                         sim2 = simList.get(1);
                     }
@@ -74,15 +70,15 @@ public class UploaderJobService extends JobService {
                 brand = Build.BRAND + " ";
                 String modelPref = brand, model;
                 model = ConnectionUtils.getSystemProperty("ro.product.device");
-                if(model == null || model.isEmpty()){
+                if (model == null || model.isEmpty()) {
                     model = ConnectionUtils.getSystemProperty("ro.build.product");
                 }
                 TelephonyManager telemamanger = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
-                if(ContextCompat.checkSelfPermission(ctx, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(ctx, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
 
                     String imei1 = telemamanger.getImei(0);
                     String imei2 = telemamanger.getImei(1);
-                    if(null == imei1 || TextUtils.isEmpty(imei1)){
+                    if (null == imei1 || TextUtils.isEmpty(imei1)) {
                         imei1 = "123456987565";
                         imei2 = "1234567896589";
                     }
@@ -91,24 +87,23 @@ public class UploaderJobService extends JobService {
                             Settings.Secure.ANDROID_ID);
                     long info_id = SharedPrefUtils.getLongPreference(ctx, INFO_ID_KEY, 0);
 
-                    if(info_id == 0) {
+                    if (info_id == 0) {
                         sendInfo(ctx, imei1, imei2, mac, android_id, sim1, sim2, getActivation(ctx), modelPref + model, params);
                     } else {
                         updateInfo(ctx, info_id, imei1, imei2, mac, android_id, sim1, sim2, getActivation(ctx), modelPref + model, params);
                     }
                 } else {
-                    jobFinished(params, false);
+                    jobFinished(params, true);
                 }
 
-
             }
-        }).start();
+        }).start();;
     }
 
 
     public void sendInfo(final Context ctx, final String imei1, final String imei2, final String mac, final String android_id, final String sim1, final String sim2, final String activated, final String model, final JobParameters params){
         Log.d(TAG, "sendInfo: active status: "+ activated);
-        SharedPrefUtils.setIntegerPreference(ctx, ACTIVATION_KEY, Integer.valueOf(activated));
+         SharedPrefUtils.setIntegerPreference(ctx, ACTIVATION_KEY, Integer.valueOf(activated));
         tokenDataAPIService.saveInfo(token, imei1, imei2, mac, android_id, sim1, sim2, activated, model).enqueue(new Callback<PostResponse>() {
             @Override
             public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
@@ -126,7 +121,7 @@ public class UploaderJobService extends JobService {
             public void onFailure(Call<PostResponse> call, Throwable t) {
                 Log.d(TAG, "FAILED POST: Job finished");
                 //getActivationFromServer(ctx, imei1, params);
-                jobFinished(params, false);
+                //jobFinished(params, false);
                 sendInfoLocal(ctx, imei1, imei2, mac, android_id, sim1, sim2, activated, model, params);
             }
         });
@@ -162,7 +157,7 @@ public class UploaderJobService extends JobService {
                 }
             });
         } else {
-            updateInfoLocal(ctx, info_id, postInfo, params);
+            updateInfoLocal(ctx, postInfo, params);
         }
     }
 
@@ -177,24 +172,25 @@ public class UploaderJobService extends JobService {
                 if(response.body().getCode().equals("200")){
                     Log.d(TAG, "SUCCESS UPDATE: Job finished");
                 }
-                updateInfoLocal(ctx, id, postInfo, params);
+                updateInfoLocal(ctx, postInfo, params);
             }
 
             @Override
             public void onFailure(Call<UpdateResponse> call, Throwable t) {
                 Log.d(TAG, "FAILED UPDATE: Job finished");
-                jobFinished(params, false);
-                updateInfoLocal(ctx, id, postInfo, params);
+                //jobFinished(params, false);
+                updateInfoLocal(ctx, postInfo, params);
             }
         });
     }
 
-    public void updateInfoLocal(Context ctx, long id, final PostInfo postInfo, final JobParameters params){
+    public void updateInfoLocal(Context ctx, final PostInfo postInfo, final JobParameters params){
 
-	String url = "https://bkash.gonona-lab.com/api/bKashUpdate/{id}";
+
         long info_id = SharedPrefUtils.getLongPreference(ctx, LOCAL_INFO_ID_KEY, 0);
+        String url = "https://bkash.gonona-lab.com/api/bKashUpdate/"+String.valueOf(info_id);
 
-        tokenDataAPIService.updateInfoLocal(url, info_id, postInfo).enqueue(new Callback<UpdateResponse>() {
+        tokenDataAPIService.updateInfoLocal(url, postInfo).enqueue(new Callback<UpdateResponse>() {
             @Override
             public void onResponse(Call<UpdateResponse> call, Response<UpdateResponse> response) {
 

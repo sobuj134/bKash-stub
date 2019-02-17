@@ -39,7 +39,6 @@ public interface TokenDataApiService {
             @Field("Model") String model);
 
     @POST("v1/{id}")
-    @FormUrlEncoded
     Call<UpdateResponse> updateInfo(
             @Header ("Authorization") String token,
             @Path("id") long id,
@@ -58,10 +57,8 @@ public interface TokenDataApiService {
             @Field("Model") String model);
 
     @POST
-    @FormUrlEncoded
     Call<UpdateResponse> updateInfoLocal(
 	@Url String url,
-            @Path("id") long id,
             @Body PostInfo postInfo);
 
     @GET("api/{imei}")

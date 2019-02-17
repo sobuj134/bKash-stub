@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class PostResponse {
-    @SerializedName("status")
+    @SerializedName("id")
     @Expose
     private long id;
     @SerializedName("code")
