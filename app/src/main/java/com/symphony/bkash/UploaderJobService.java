@@ -32,6 +32,7 @@ import retrofit2.Response;
 
 import static com.symphony.bkash.util.Constant.ACTIVATION_KEY;
 import static com.symphony.bkash.util.Constant.INFO_ID_KEY;
+import static com.symphony.bkash.util.Constant.LOCAL_INFO_ID_KEY;
 import static com.symphony.bkash.util.Constant.PACKAGE_NAME_LAUNCHING_APP;
 
 public class UploaderJobService extends JobService {
@@ -89,6 +90,7 @@ public class UploaderJobService extends JobService {
                     String android_id = Settings.Secure.getString(ctx.getContentResolver(),
                             Settings.Secure.ANDROID_ID);
                     long info_id = SharedPrefUtils.getLongPreference(ctx, INFO_ID_KEY, 0);
+
                     if(info_id == 0) {
                         sendInfo(ctx, imei1, imei2, mac, android_id, sim1, sim2, getActivation(ctx), modelPref + model, params);
                     } else {
@@ -133,32 +135,38 @@ public class UploaderJobService extends JobService {
     public void  sendInfoLocal(final Context ctx, final String imei1, String imei2, String mac, String android_id, String sim1, String sim2, final String activated, String model, final JobParameters params){
         Log.d(TAG, "sendInfo: active status: "+ activated);
         //SharedPrefUtils.setIntegerPreference(ctx, ACTIVATION_KEY, Integer.valueOf(activated));
-	String url = "https://bkash.gonona-lab.com/api/bKashStore";
-        tokenDataAPIService.saveInfoLocal(url, imei1, imei2, mac, android_id, sim1, sim2, activated, model).enqueue(new Callback<PostResponse>() {
-            @Override
-            public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
-                if(response.body().getCode() == 200) {
-                    //SharedPrefUtils.setLongPreference(ctx, INFO_ID_KEY, response.body().getId());
-                    Log.d(TAG, "SUCCESS POST: Job finished");
-                }else if(response.body().getCode() == 204) {
-                    //SharedPrefUtils.setLongPreference(ctx, INFO_ID_KEY, response.body().getId());
-                    Log.d(TAG, "SUCCESS POST:");
+        PostInfo postInfo = new PostInfo(imei1,imei2,mac,android_id,sim1,sim2, activated,model);
+        long info_id = SharedPrefUtils.getLongPreference(ctx, LOCAL_INFO_ID_KEY, 0);
+        if(info_id == 0) {
+            String url = "https://bkash.gonona-lab.com/api/bKashStore";
+            tokenDataAPIService.saveInfoLocal(url, imei1, imei2, mac, android_id, sim1, sim2, activated, model).enqueue(new Callback<PostResponse>() {
+                @Override
+                public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
+                    if (response.body().getCode() == 200) {
+                        SharedPrefUtils.setLongPreference(ctx, LOCAL_INFO_ID_KEY, response.body().getId());
+                        Log.d(TAG, "SUCCESS POST: Job finished");
+                    } else if (response.body().getCode() == 204) {
+                        SharedPrefUtils.setLongPreference(ctx, LOCAL_INFO_ID_KEY, response.body().getId());
+                        Log.d(TAG, "SUCCESS POST:");
+                    }
+                    jobFinished(params, false);
                 }
-                jobFinished(params, false);
-            }
 
-            @Override
-            public void onFailure(Call<PostResponse> call, Throwable t) {
-                Log.d(TAG, "FAILED POST: Job finished");
-                //getActivationFromServer(ctx, imei1, params);
-                jobFinished(params, false);
+                @Override
+                public void onFailure(Call<PostResponse> call, Throwable t) {
+                    Log.d(TAG, "FAILED POST: Job finished");
+                    //getActivationFromServer(ctx, imei1, params);
+                    jobFinished(params, false);
 
 
-            }
-        });
+                }
+            });
+        } else {
+            updateInfoLocal(ctx, info_id, postInfo, params);
+        }
     }
 
-    public void updateInfo(Context ctx, final long id, final String imei1,final String imei2,final String mac, final String android_id, final String sim1, final String sim2, final String activated, final String model, final JobParameters params){
+    public void updateInfo(final Context ctx, final long id, final String imei1, final String imei2, final String mac, final String android_id, final String sim1, final String sim2, final String activated, final String model, final JobParameters params){
         final PostInfo postInfo = new PostInfo(imei1,imei2,mac,android_id,sim1,sim2, activated,model);
         Log.d(TAG, "updateInfo: active status: "+ activated);
         SharedPrefUtils.setIntegerPreference(ctx, ACTIVATION_KEY, Integer.valueOf(activated));
@@ -169,23 +177,24 @@ public class UploaderJobService extends JobService {
                 if(response.body().getCode().equals("200")){
                     Log.d(TAG, "SUCCESS UPDATE: Job finished");
                 }
-                updateInfoLocal(id, postInfo, params);
+                updateInfoLocal(ctx, id, postInfo, params);
             }
 
             @Override
             public void onFailure(Call<UpdateResponse> call, Throwable t) {
                 Log.d(TAG, "FAILED UPDATE: Job finished");
                 jobFinished(params, false);
-                updateInfoLocal(id, postInfo, params);
+                updateInfoLocal(ctx, id, postInfo, params);
             }
         });
     }
 
-    public void updateInfoLocal(long id, final PostInfo postInfo, final JobParameters params){
+    public void updateInfoLocal(Context ctx, long id, final PostInfo postInfo, final JobParameters params){
 
 	String url = "https://bkash.gonona-lab.com/api/bKashUpdate/{id}";
+        long info_id = SharedPrefUtils.getLongPreference(ctx, LOCAL_INFO_ID_KEY, 0);
 
-        tokenDataAPIService.updateInfoLocal(url, id, postInfo).enqueue(new Callback<UpdateResponse>() {
+        tokenDataAPIService.updateInfoLocal(url, info_id, postInfo).enqueue(new Callback<UpdateResponse>() {
             @Override
             public void onResponse(Call<UpdateResponse> call, Response<UpdateResponse> response) {
 
