@@ -1,37 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.symphony.bkash">
+    package="com.symphony.bkashg">
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
-
-
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".bKashApp"
+        android:hardwareAccelerated="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:networkSecurityConfig="@xml/network_security_config"
-        android:name=".bKashApp">
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity
+            android:name=".NewNewsActivity"
+            android:label="@string/title_activity_new_news"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-4365083222822400~9347724175" />
         <meta-data
             android:name="com.onesignal.NotificationOpened.DEFAULT"
             android:value="DISABLE" />
-        <meta-data android:name="com.onesignal.NotificationAccentColor.DEFAULT" android:value="FF00FF00" />
-        <activity android:name=".NewsWebActivity" />
-        <activity android:name=".NewsActivity"
+        <meta-data
+            android:name="com.onesignal.NotificationAccentColor.DEFAULT"
+            android:value="FF00FF00" />
+
+        <activity
+            android:name=".NewsWebActivity"
+            android:label="Trendy News" />
+        <activity
+            android:name=".NewsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".FirstActivity"
+        <activity
+            android:name=".FirstActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:launchMode="singleTop"
-            android:theme="@style/SplashTheme">
+            android:theme="@style/SplashTheme"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,13 +57,13 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".UploaderJobService"
+        <service
+            android:name=".UploaderJobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-
         <service
             android:name=".onesignal.MyNotificationExtenderService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="false">
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE">
             <intent-filter>
                 <action android:name="com.onesignal.NotificationExtender" />
             </intent-filter>

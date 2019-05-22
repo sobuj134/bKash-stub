@@ -17,5 +17,17 @@
         <key>RESTRICTION</key>
         <value>false</value>
     </entry>
+    <entry>
+        <key>ADS</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>not_eligible</key>
+        <value>Your handset is not eligible!!!</value>
+    </entry>
+    <entry>
+        <key>not_eligible_msg</key>
+        <value>This handset is unauthorised. Please use any Authorised Handset</value>
+    </entry>
 </defaultsMap>
     <!-- END xml_defaults -->

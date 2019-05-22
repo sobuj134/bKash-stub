@@ -14,4 +14,6 @@
     <string name="not_eligible_msg">কোন যোগ্য হ্যান্ডসেট ব্যবহার করুন</string>
 
     <string name="runtime_permissions_txt">অ্যাপ্লিকেশন সেটিংস থেকে সব অনুমতি সক্রিয় করুন</string>
+    <string name="ADS">false</string>
+
 </resources>

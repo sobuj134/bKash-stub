@@ -25,15 +25,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "882348019046-2n8b670cat88gvcgqcmsmns5qt168oh9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     },
@@ -64,20 +62,50 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "882348019046-2n8b670cat88gvcgqcmsmns5qt168oh9.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:882348019046:android:60570d0dffb6b8bc",
+        "android_client_info": {
+          "package_name": "com.symphony.bkashg"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "882348019046-jbbsvukumnl54o4cj5fgdj2c8jvl1far.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.symphony.bkashg",
+            "certificate_hash": "f26a6545bd3c352ed28d0e2dd62273fe34442185"
+          }
         },
-        "ads_service": {
-          "status": 2
+        {
+          "client_id": "882348019046-2n8b670cat88gvcgqcmsmns5qt168oh9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGQYn9tUhJLODS5OfurD0G3VAKQy1mmeA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "882348019046-2n8b670cat88gvcgqcmsmns5qt168oh9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
