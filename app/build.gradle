@@ -12,7 +12,7 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [
-                onesignal_app_id: '1c20a90c-755f-483e-9e14-7d9bdc41ae75',
+                onesignal_app_id               : '1c20a90c-755f-483e-9e14-7d9bdc41ae75',
                 // Project number pulled from dashboard, local value is ignored.
                 onesignal_google_project_number: '882348019046'
         ]
@@ -48,9 +48,15 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.google.code.gson:gson:2.8.4'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
-    implementation 'com.android.support:recyclerview-v7:28.0.0' // Required Dependency by Audience Network SDK
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    // Required Dependency by Audience Network SDK
     implementation 'com.facebook.android:audience-network-sdk:5.+'
     implementation 'org.jsoup:jsoup:1.10.2'
-    implementation files('build/libs/YouTubeAndroidPlayerApi.jar')
+    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.3'
+//    // For youtube Url Extractor
+//    implementation 'com.github.HaarigerHarald:android-youtubeExtractor:v1.7.0'
+//    // ExoPlayer
+//    implementation 'com.google.android.exoplayer:exoplayer:2.7.3'
+//    implementation files('build/libs/YouTubeAndroidPlayerApi.jar')
 }
 apply plugin: 'com.google.gms.google-services'

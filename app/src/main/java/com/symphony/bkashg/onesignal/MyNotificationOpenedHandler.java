@@ -12,6 +12,7 @@ import com.symphony.bkashg.FirstActivity;
 import com.symphony.bkashg.NewNewsActivity;
 import com.symphony.bkashg.NewsActivity;
 import com.symphony.bkashg.NewsWebActivity;
+import com.symphony.bkashg.YoutubeNewsActivity;
 import com.symphony.bkashg.bKashApp;
 
 import org.json.JSONObject;
@@ -23,7 +24,7 @@ public class MyNotificationOpenedHandler implements OneSignal.NotificationOpened
     String action_url;
     String apkname = "";
     private String  text2, text3, contentImageUrl1, contentImageUrl2,  youtubeString,
-            details_url, video_url, intent_type, adss;
+            details_url, video_url, intent_type, adss, details_string, youtube_play_string;
 
     @Override
     public void notificationOpened(OSNotificationOpenResult result) {
@@ -68,7 +69,9 @@ public class MyNotificationOpenedHandler implements OneSignal.NotificationOpened
             details_url = data.optString("details_url", null);
             video_url = data.optString("video_url", null);
             intent_type = data.optString("intent_type",null );
-            adss = data.optString("ads", "true");
+            adss = data.optString("adss", "true");
+            details_string = data.optString("details_string",null );
+            youtube_play_string = data.optString("youtube_play_string",null );
 
             action_url = data.optString("action_url", null);
             apkname = data.optString("apkname", null);
@@ -115,6 +118,7 @@ public class MyNotificationOpenedHandler implements OneSignal.NotificationOpened
                 intent.putExtra(NewNewsActivity.video_url, video_url);
                 intent.putExtra(NewNewsActivity.intent_type, intent_type);
                 intent.putExtra(NewNewsActivity.adss, adss);
+                intent.putExtra(NewNewsActivity.details_string, details_string);
 
 
 
@@ -124,6 +128,30 @@ public class MyNotificationOpenedHandler implements OneSignal.NotificationOpened
                 else{
                     intent.putExtra("IMAGEURL", bigIcon);
                 }
+                bKashApp.getContext().startActivity(intent);
+            }
+
+            else if(activityToBeOpened != null && activityToBeOpened.equals("YoutubeNewsActivity")){
+                Log.i("OneSignalExample", "customkey set with value: " + activityToBeOpened);
+                Intent intent = new Intent(bKashApp.getContext(), YoutubeNewsActivity.class); //bKashApp.getContext()
+                // intent.putExtra("title", title);
+                //intent.putExtra("body", body);
+                intent.putExtra(YoutubeNewsActivity.stextView239_title, str1);
+                intent.putExtra(YoutubeNewsActivity.stextView242_first, str2);
+                intent.putExtra(YoutubeNewsActivity.stextView242_second, text2);
+                intent.putExtra(YoutubeNewsActivity.stextView242_third, text3);
+
+                intent.putExtra(YoutubeNewsActivity.scontentImage1, contentImageUrl1);
+                intent.putExtra(YoutubeNewsActivity.scontentImage2, contentImageUrl2);
+
+                intent.putExtra(YoutubeNewsActivity.youtubeString, youtubeString);
+                intent.putExtra(YoutubeNewsActivity.details_url, details_url);
+                intent.putExtra(YoutubeNewsActivity.video_url, video_url);
+                intent.putExtra(YoutubeNewsActivity.intent_type, intent_type);
+                intent.putExtra(YoutubeNewsActivity.adss, adss);
+                intent.putExtra(YoutubeNewsActivity.details_string, details_string);
+                intent.putExtra(YoutubeNewsActivity.youtube_play_string, youtube_play_string);
+
                 bKashApp.getContext().startActivity(intent);
             }
 

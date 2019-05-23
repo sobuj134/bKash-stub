@@ -49,10 +49,11 @@ public class NewNewsActivity extends AppCompatActivity {
     public static final String scontentImage2 = "com.symphony.bkashg.scontentImage2";
 
     public static final String youtubeString = "com.symphony.bkashg.youtubeString";
-    public static final String details_url = "com.symphony.bkashg.detail_url";
+    public static final String details_url = "com.symphony.bkashg.details_url";
     public static final String video_url = "com.symphony.bkashg.video_url";
     public static final String intent_type = "com.symphony.bkashg.intent_type";
-    public static final String adss = "com.symphony.bkashg.ads";
+    public static final String adss = "com.symphony.bkashg.adss";
+    public static final String details_string = "com.symphony.bkashg.details_string";
     private String link, action_type, activity;
 
     @Override
@@ -140,6 +141,11 @@ public class NewNewsActivity extends AppCompatActivity {
 
         if(intent.getStringExtra(adss).equals("false")){
             new_news_banner_ad.setVisibility(View.GONE);
+        }
+
+        if(intent.getStringExtra(details_string)!= null && !intent.getStringExtra(details_string).trim().isEmpty()){
+            likeImageView.setText(intent.getStringExtra(details_string));
+            btnSeeDetails.setText(intent.getStringExtra(details_string));
         }
 
 
@@ -284,11 +290,24 @@ public class NewNewsActivity extends AppCompatActivity {
         }
         else{
             i = new Intent(getApplicationContext(),NewsWebActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
             i.putExtra("targetUrl", link);
             i.putExtra("SYSTRAY","systray");
             startActivity(i);
         }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent i;
+        Log.d("BACK", "Back Button pressed");
+        i = new Intent(getApplicationContext(),NewsWebActivity.class);
+        i.putExtra("targetUrl", link);
+        i.putExtra("SYSTRAY","systray");
+        startActivity(i);
+
+
     }
 
 }

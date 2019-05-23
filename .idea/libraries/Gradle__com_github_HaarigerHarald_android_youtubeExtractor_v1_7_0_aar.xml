@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.HaarigerHarald:android-youtubeExtractor:v1.7.0@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/06389f726b74df9f7729fdc93d3d65bd/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/06389f726b74df9f7729fdc93d3d65bd/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.HaarigerHarald/android-youtubeExtractor/v1.7.0/343f023cbf831f872b306119dedc2ade7ed7fcd6/android-youtubeExtractor-v1.7.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

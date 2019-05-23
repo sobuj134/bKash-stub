@@ -12,7 +12,7 @@
     <string name="not_eligible">Your handset is not eligible!!!</string>
     <string name="not_eligible_msg">Please use any eligible handset</string>
     <string name="ADS">false</string>
-    <string name = "Facebook_Banner">310191579906622_310192449906535</string>
+    <string name="Facebook_Banner">310191579906622_310192449906535</string>
 
 
     <string name="runtime_permissions_txt">Please enable ALL permissions from app settings</string>
