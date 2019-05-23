@@ -15,10 +15,10 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -309,10 +309,7 @@ public class FirstActivity extends BaseActivity implements AppUpdateListener {
         alert.show();
     }
 
-   public void demoLoad (View v){
-       Intent intent = new Intent(this,NewNewsActivity.class);
-       startActivity(intent);
-   }
+
 
 }
 

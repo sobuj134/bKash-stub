@@ -9,11 +9,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.SparseIntArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -131,7 +131,7 @@ public class BaseActivity extends AppCompatActivity {
         Snackbar snackbar = Snackbar
                 .make(viewGroup, message, Snackbar.LENGTH_LONG);
         View sbView = snackbar.getView();
-        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        TextView textView = (TextView) sbView.findViewById(R.id.snackbar_text);
         textView.setTextColor(Color.YELLOW);
         snackbar.show();
     }

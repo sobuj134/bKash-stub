@@ -1,40 +1,44 @@
 package com.symphony.bkashg;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.SparseArray;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.facebook.ads.Ad;
+import com.facebook.ads.AdError;
+import com.facebook.ads.AdIconView;
+import com.facebook.ads.AdOptionsView;
 import com.facebook.ads.MediaView;
 import com.facebook.ads.NativeAd;
+import com.facebook.ads.NativeAdBase;
 import com.facebook.ads.NativeAdLayout;
-import com.google.android.exoplayer2.ui.PlayerView;
+
+import com.facebook.ads.NativeAdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.youtube.player.YouTubeBaseActivity;
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerView;
-import com.squareup.picasso.Picasso;
-import com.symphony.bkashg.config.Yconfig;
-import com.symphony.bkashg.util.ExoPlayerManager;
 
-import at.huber.youtubeExtractor.VideoMeta;
-import at.huber.youtubeExtractor.YouTubeExtractor;
-import at.huber.youtubeExtractor.YtFile;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class YoutubeNewsActivity extends AppCompatActivity {
 
     private Button ytbtntextView238, btnSeeDetail;
-    private YouTubePlayerView  ytcoverPhotoImageView;
+    private YouTubePlayerView ytcoverPhotoImageView;
     private final String TAG = YoutubeNewsActivity.class.getSimpleName();
 
 //    private YouTubePlayer.OnInitializedListener ytOnInitializedListener;
@@ -83,7 +87,9 @@ public class YoutubeNewsActivity extends AppCompatActivity {
         ytbtntextView238 = findViewById(R.id.ytbtntextView238);
         youtube_news_banner_ad = findViewById(R.id.youtube_news_banner_ad);
         btnSeeDetail = findViewById(R.id.btnSeeDetail);
+
          ytcoverPhotoImageView = findViewById(R.id.ytcoverPhotoImageView);
+        getLifecycle().addObserver(ytcoverPhotoImageView);
 
         textView239_title = findViewById(R.id.textView239_title);
         textView242_first = findViewById(R.id.textView242_first);
@@ -95,23 +101,12 @@ public class YoutubeNewsActivity extends AppCompatActivity {
 
         loadDataFromIntent();
 
-//        ytOnInitializedListener = new YouTubePlayer.OnInitializedListener() {
-//            @Override
-//            public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
-//                if(!b) {
-//                    Log.d(TAG, "youtube player initialized done");
-//                    youTubePlayer.loadVideo(youtubeurl);
-//                    youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
-//                }
-//            }
-//
-//            @Override
-//            public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-//
-//            }
-//        };
 
-        extractYoutubeUrl();
+        adRequest = new AdRequest.Builder().build();
+        youtube_news_banner_ad.loadAd(adRequest);
+
+        loadNativeAd();
+
     }
 
     @Override
@@ -123,11 +118,7 @@ public class YoutubeNewsActivity extends AppCompatActivity {
 
     }
 
-//    public void playYouTubeVideo(View v){
-//        Log.d(TAG,"onclick: initializing youtube player");
-//        ytcoverPhotoImageView.initialize(Yconfig.getApiKey(), ytOnInitializedListener);
-//        Log.d(TAG,"youtube player running");
-//    }
+
 
     public void seeDetailAction(View v){
         Intent i;
@@ -138,7 +129,7 @@ public class YoutubeNewsActivity extends AppCompatActivity {
         else{
             i = new Intent(getApplicationContext(),NewsWebActivity.class);
             i.putExtra("targetUrl", link);
-            i.putExtra("SYSTRAY","systray");
+            i.putExtra("sourceActivity","YoutubeNewsActivity");
             startActivity(i);
         }
     }
@@ -171,6 +162,7 @@ public class YoutubeNewsActivity extends AppCompatActivity {
 
         if(intent.getStringExtra(youtubeString)!= null && !intent.getStringExtra(youtubeString).trim().isEmpty()){
             youtubeurl = intent.getStringExtra(youtubeString);
+            playVideo(youtubeurl);
         }
 
         if(intent.getStringExtra(details_url)!= null && !intent.getStringExtra(details_url).trim().isEmpty()){
@@ -195,6 +187,9 @@ public class YoutubeNewsActivity extends AppCompatActivity {
         if(intent.getStringExtra(details_string)!= null && !intent.getStringExtra(details_string).trim().isEmpty()){
             btnSeeDetail.setText(intent.getStringExtra(details_string));
         }
+        else{
+            btnSeeDetail.setVisibility(View.GONE);
+        }
 
         if(intent.getStringExtra(youtube_play_string)!= null && !intent.getStringExtra(youtube_play_string).trim().isEmpty()){
             ytbtntextView238.setText(intent.getStringExtra(youtube_play_string));
@@ -202,23 +197,136 @@ public class YoutubeNewsActivity extends AppCompatActivity {
 
     }
 
-    private void extractYoutubeUrl() {
-        @SuppressLint("StaticFieldLeak") YouTubeExtractor mExtractor = new YouTubeExtractor(this) {
+    private void playVideo(final String youtubeString){
+        ytcoverPhotoImageView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
             @Override
-            protected void onExtractionComplete(SparseArray<YtFile> sparseArray, VideoMeta videoMeta) {
-                if (sparseArray != null) {
-                    playVideo(sparseArray.get(17).getUrl());
-                }
+            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+
+                youTubePlayer.loadVideo(youtubeString, 0);
+
             }
-        };
-        mExtractor.extract(youtubeurl, true, true);
+        });
     }
 
-    private void playVideo(String downloadUrl) {
-//        PlayerView mPlayerView = findViewById(R.id.mPlayerView);
-        String temp = downloadUrl;
-        ytcoverPhotoImageView.setPlayer(ExoPlayerManager.getSharedInstance(this).getPlayerView().getPlayer());
-        ExoPlayerManager.getSharedInstance(this).playStream(downloadUrl);
+
+
+    private void loadNativeAd() {
+        // Instantiate a NativeAd object.
+        // NOTE: the placement ID will eventually identify this as your App, you can ignore it for
+        // now, while you are testing and replace it later when you have signed up.
+        // While you are using this temporary code you will only get test ads and if you release
+        // your code like this to the Google Play your users will not receive ads (you will get a no fill error).
+        nativeAd = new NativeAd(this, "https://drive.google.com/drive/folders/1fJ-vDn2uhATvMxFiMnvq4sUy0cfbqsM3");
+
+        nativeAd.setAdListener(new NativeAdListener() {
+            @Override
+            public void onMediaDownloaded(Ad ad) {
+                // Native ad finished downloading all assets
+                Log.e(TAG, "Native ad finished downloading all assets.");
+                if (nativeAd == null || nativeAd != ad) {
+                    return;
+                }
+
+                inflateAd(nativeAd);
+            }
+
+            @Override
+            public void onError(Ad ad, AdError adError) {
+                // Native ad failed to load
+                Log.e(TAG, "Native ad failed to load: " + adError.getErrorMessage());
+            }
+
+            @Override
+            public void onAdLoaded(Ad ad) {
+                // Race condition, load() called again before last ad was displayed
+                if (nativeAd == null || nativeAd != ad) {
+                    return;
+                }
+                // Inflate Native Ad into Container
+                inflateAd(nativeAd);
+
+                // Create a list of clickable views
+                List<View> clickableViews = new ArrayList<>();
+                clickableViews.add(nativeAdTitle);
+                clickableViews.add(nativeAdCallToAction);
+
+                // Register the Title and CTA button to listen for clicks.
+                nativeAd.registerViewForInteraction(
+                        adView,
+                        nativeAdMedia,
+
+                        clickableViews);
+                nativeAd.downloadMedia();
+
+                // Native ad is loaded and ready to be displayed
+                Log.d(TAG, "Native ad is loaded and ready to be displayed!");
+            }
+
+            @Override
+            public void onAdClicked(Ad ad) {
+                // Native ad clicked
+                Log.d(TAG, "Native ad clicked!");
+            }
+
+            @Override
+            public void onLoggingImpression(Ad ad) {
+                // Native ad impression
+                Log.d(TAG, "Native ad impression logged!");
+            }
+        });
+
+        // Request an ad
+        nativeAd.loadAd(NativeAdBase.MediaCacheFlag.NONE);
     }
+
+
+    private void inflateAd(NativeAd nativeAd) {
+
+        nativeAd.unregisterView();
+
+        // Add the Ad view into the ad container.
+        nativeAdLayout = findViewById(R.id.native_ad_container);
+        LayoutInflater inflater = LayoutInflater.from(YoutubeNewsActivity.this);
+        // Inflate the Ad view.  The layout referenced should be the one you created in the last step.
+        adView = (LinearLayout) inflater.inflate(R.layout.native_ad_layout, nativeAdLayout, false);
+        nativeAdLayout.addView(adView);
+
+        // Add the AdOptionsView
+        LinearLayout adChoicesContainer = findViewById(R.id.ad_choices_container);
+        AdOptionsView adOptionsView = new AdOptionsView(YoutubeNewsActivity.this, nativeAd, nativeAdLayout);
+        adChoicesContainer.removeAllViews();
+        adChoicesContainer.addView(adOptionsView, 0);
+
+        // Create native UI using the ad metadata.
+        AdIconView nativeAdIcon = adView.findViewById(R.id.native_ad_icon);
+        nativeAdTitle = adView.findViewById(R.id.native_ad_title);
+        nativeAdMedia = adView.findViewById(R.id.native_ad_media);
+        TextView nativeAdSocialContext = adView.findViewById(R.id.native_ad_social_context);
+        TextView nativeAdBody = adView.findViewById(R.id.native_ad_body);
+        TextView sponsoredLabel = adView.findViewById(R.id.native_ad_sponsored_label);
+        nativeAdCallToAction = adView.findViewById(R.id.native_ad_call_to_action);
+
+        // Set the Text.
+        nativeAdTitle.setText(nativeAd.getAdvertiserName());
+        nativeAdBody.setText(nativeAd.getAdBodyText());
+        nativeAdSocialContext.setText(nativeAd.getAdSocialContext());
+        nativeAdCallToAction.setVisibility(nativeAd.hasCallToAction() ? View.VISIBLE : View.INVISIBLE);
+        nativeAdCallToAction.setText(nativeAd.getAdCallToAction());
+        sponsoredLabel.setText(nativeAd.getSponsoredTranslation());
+
+        // Create a list of clickable views
+        List<View> clickableViews = new ArrayList<>();
+        clickableViews.add(nativeAdTitle);
+        clickableViews.add(nativeAdCallToAction);
+
+        // Register the Title and CTA button to listen for clicks.
+        nativeAd.registerViewForInteraction(
+                adView,
+                nativeAdMedia,
+                nativeAdIcon,
+                clickableViews);
+    }
+
+
 
 }

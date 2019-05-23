@@ -20,7 +20,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".YoutubeNewsActivity"></activity>
+        <activity android:name=".YoutubeNewsActivity"
+            android:label="Trendy News">
+
+        </activity>
         <activity
             android:name=".NewNewsActivity"
             android:label="@string/title_activity_new_news"

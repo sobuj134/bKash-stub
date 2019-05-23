@@ -3,10 +3,9 @@ package com.symphony.bkashg;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,6 @@ import com.facebook.ads.*;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.squareup.picasso.Picasso;
-import com.symphony.bkashg.config.Fconfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -147,6 +145,10 @@ public class NewNewsActivity extends AppCompatActivity {
             likeImageView.setText(intent.getStringExtra(details_string));
             btnSeeDetails.setText(intent.getStringExtra(details_string));
         }
+        else{
+            likeImageView.setVisibility(View.GONE);
+            btnSeeDetails.setVisibility(View.GONE);
+        }
 
 
     }
@@ -171,7 +173,7 @@ public class NewNewsActivity extends AppCompatActivity {
         // now, while you are testing and replace it later when you have signed up.
         // While you are using this temporary code you will only get test ads and if you release
         // your code like this to the Google Play your users will not receive ads (you will get a no fill error).
-        nativeAd = new NativeAd(this, "310191579906622_310812919844488");
+        nativeAd = new NativeAd(this, "https://drive.google.com/drive/folders/1fJ-vDn2uhATvMxFiMnvq4sUy0cfbqsM3"); // Check google folder for API KEY
 
         nativeAd.setAdListener(new NativeAdListener() {
             @Override
@@ -291,23 +293,23 @@ public class NewNewsActivity extends AppCompatActivity {
         else{
             i = new Intent(getApplicationContext(),NewsWebActivity.class);
             i.putExtra("targetUrl", link);
-            i.putExtra("SYSTRAY","systray");
+            i.putExtra("sourceActivity","NewNewsActivity");
             startActivity(i);
         }
     }
 
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent i;
-        Log.d("BACK", "Back Button pressed");
-        i = new Intent(getApplicationContext(),NewsWebActivity.class);
-        i.putExtra("targetUrl", link);
-        i.putExtra("SYSTRAY","systray");
-        startActivity(i);
-
-
-    }
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        Intent i;
+//        Log.d("BACK", "Back Button pressed");
+//        i = new Intent(getApplicationContext(),NewsWebActivity.class);
+//        i.putExtra("targetUrl", link);
+//
+//        startActivity(i);
+//
+//
+//    }
 
 }

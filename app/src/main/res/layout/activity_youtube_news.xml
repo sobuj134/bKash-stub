@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".YoutubeNewsActivity">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:background="@color/md_grey_800"
             android:layout_height="0dp"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
         >
 
-        <android.support.v4.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             >
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout36"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -45,12 +45,11 @@
                     android:id="@+id/ytcoverPhotoImageView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxHeight="390dp"
+                    android:maxHeight="450dp"
 
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:autoPlay="true"
                     app:showFullScreenButton="false" />
 
                 <ImageView
@@ -131,7 +130,8 @@
                     app:layout_constraintEnd_toStartOf="@+id/textView235"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/imageView128"
-                    android:onClick="playYouTubeVideo"
+
+                    android:visibility="gone"
                     />
 
                 <Button
@@ -284,7 +284,8 @@
                     app:layout_constraintStart_toStartOf="parent"
 
                     app:layout_constraintTop_toBottomOf="@+id/view83_second"
-                    tools:srcCompat="@drawable/baseline_image_black_24" />
+                    tools:srcCompat="@drawable/baseline_image_black_24"
+                    android:visibility="gone" />
 
                 <View
                     android:id="@+id/view83_native"
@@ -312,7 +313,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="12dp"
                     android:layout_marginStart="12dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="16dp"
                     android:lineSpacingExtra="2dp"
                     android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry"
                     android:textAlignment="viewStart"
@@ -383,15 +384,15 @@
                     android:layout_marginBottom="7dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/btnSeeDetails" />
+                    app:layout_constraintTop_toBottomOf="@+id/btnSeeDetail" />
 
 
-            </android.support.constraint.ConstraintLayout>
-        </android.support.v4.widget.NestedScrollView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
 
 
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <LinearLayout
@@ -399,7 +400,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_gravity="bottom"
-        android:visibility="gone">
+        >
         <com.google.android.gms.ads.AdView
             xmlns:ads="http://schemas.android.com/apk/res-auto"
             android:id="@+id/youtube_news_banner_ad"
@@ -409,10 +410,10 @@
             android:layout_alignParentBottom="true"
             ads:adSize="BANNER"
             ads:adUnitId="ca-app-pub-4365083222822400/1936138011">
-            <!--ca-app-pub-3616894417668311/5453282013-->
+            <!--ca-app-pub-4365083222822400/1936138011-->
         </com.google.android.gms.ads.AdView>
 
     </LinearLayout>
 
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

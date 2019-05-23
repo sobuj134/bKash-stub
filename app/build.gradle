@@ -7,10 +7,10 @@ android {
         applicationId "com.symphony.bkashg"
         minSdkVersion 26
         targetSdkVersion 28
-        versionCode 5
-        versionName "5.0"
+        versionCode 6
+        versionName "6.0"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [
                 onesignal_app_id               : '1c20a90c-755f-483e-9e14-7d9bdc41ae75',
                 // Project number pulled from dashboard, local value is ignored.
@@ -31,11 +31,11 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
 
-    implementation 'com.android.support:support-v4:28.0.0'
-    implementation 'com.android.support:design:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.google.firebase:firebase-core:16.0.8'
     implementation 'com.google.firebase:firebase-messaging:17.5.0'
     implementation 'com.onesignal:OneSignal:[3.9.1, 3.99.99]'
@@ -48,7 +48,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.google.code.gson:gson:2.8.4'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
     // Required Dependency by Audience Network SDK
     implementation 'com.facebook.android:audience-network-sdk:5.+'
     implementation 'org.jsoup:jsoup:1.10.2'

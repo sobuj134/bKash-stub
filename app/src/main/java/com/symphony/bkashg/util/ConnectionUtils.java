@@ -3,7 +3,7 @@ package com.symphony.bkashg.util;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 

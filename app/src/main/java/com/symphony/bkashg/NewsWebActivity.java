@@ -3,8 +3,8 @@ package com.symphony.bkashg;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -29,7 +29,7 @@ public class NewsWebActivity extends AppCompatActivity  implements AdvancedWebVi
     private ProgressBarHandler mProgressBarHandler;
 
     String Systray;
-    String targetURL , textData;
+    String targetURL , textData, sourceActivity;
 
     private boolean fb;
 
@@ -55,6 +55,7 @@ public class NewsWebActivity extends AppCompatActivity  implements AdvancedWebVi
         targetURL = bundle.getString("targetUrl");
         textData = bundle.getString("textData");
         Systray = bundle.getString("SYSTRAY");
+        sourceActivity = bundle.getString("sourceActivity");
 
         mProgressBarHandler = new ProgressBarHandler(this);
 
@@ -140,13 +141,10 @@ public class NewsWebActivity extends AppCompatActivity  implements AdvancedWebVi
         super.onBackPressed();
         if (!vv.onBackPressed()) { return; }
         Intent i;
-        if(Systray == null){
-            i = new Intent(getApplicationContext(),FirstActivity.class);
-        }
-        else{
-            i = new Intent(getApplicationContext(),FirstActivity.class);
-        }
+
+        i = new Intent(getApplicationContext(), FirstActivity.class);
         startActivity(i);
+
     }
 
     public void promoshare(View v){
